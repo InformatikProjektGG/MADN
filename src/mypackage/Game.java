@@ -42,16 +42,27 @@ public class Game {
             if (player[playerNumber].positions[figur] + wuerfelZahl >= 43) {
                 figurZiehen[figur] = 0;
             }
+            
+            // check noch nicht draussen
+            if (player[playerNumber].positions[figur] == 0) {
+                figurZiehen[figur] = 0;
+            }
         }
         
         Actions actions = new Actions(figurRausstellen, figurZiehen);
         return actions;
     }
     
-    public void moveFigur(int wuerfelZahl, int playerNumber, int figurNumber) {
-        player[playerNumber].positions[figurNumber] += wuerfelZahl;
+    public Positions moveFigur(int wuerfelZahl, int playerNumber, int figurNumber) {
+        if(player[playerNumber].positions[figurNumber] == 0){
+            //stelle Figur raus
+            player[playerNumber].positions[figurNumber] = 1;
+        }else{
+            //stelle Figur (wuerfelZahl) Felder weiter
+            player[playerNumber].positions[figurNumber] += wuerfelZahl;
+        }
         
-        int newPosition = player[playerNumber].positions[figurNumber];
+        int newPosition = player[playerNumber].generalPosition(figurNumber);
 
         // check if gegnerische Figuren geschlagen
         for (int gegner = 0; gegner < 4; gegner++) {
@@ -63,8 +74,10 @@ public class Game {
                         break;
                     }
                 }
-            }
-            
+            }    
         }
+        
+        // return new positions
+        return new Positions(player);
     }
 }
