@@ -6,7 +6,7 @@ public class Game {
     
     /**
      * Erstellt neues Spiel; Figuren befinden sich auf den Startpsoitionen
-     * @param numPlayerss Anzahl der Spieler (inklusive Computer gesteuerter Spieler)
+     * @param numPlayers Anzahl der Spieler (inklusive Computer gesteuerter Spieler)
      */
     public Game(int numPlayers) {
         //create players array
@@ -22,18 +22,7 @@ public class Game {
      * @param playersNumber Nummer des Spielers, der gewuerfelt hat
      * @return Actions Object mit zulaessigen Spielzuegen
      */
-    public Actions checkActions(int wuerfelZahl, int playersNumber) {
-        boolean figurRausstellen = false;
-        if (wuerfelZahl == 6) {
-            //Figur Rausstellen koennte moeglich sein
-            for (int i = 0; i < 4; i++) {
-                if (players[playersNumber].positions[i] == 0) {
-                    figurRausstellen = true;
-                    break;
-                }
-            }
-        }
-        
+    public Actions checkActions(int wuerfelZahl, int playersNumber) {        
         int[] figurZiehen = new int[4];
         for (int figur = 0; figur < 4; figur++) {
             //fuer jede eigene Spielfigur
@@ -55,28 +44,28 @@ public class Game {
             
             // check noch nicht draussen
             if (players[playersNumber].positions[figur] == 0) {
-                figurZiehen[figur] = 0;
+                figurZiehen[figur] = 1;
             }
         }
         
-        Actions actions = new Actions(figurRausstellen, figurZiehen);
+        Actions actions = new Actions(figurZiehen);
         return actions;
     }
     
     /**
      * bewegt eine Spielfigur; unerlaubte Zuege werden auch durchgefuert!
-     * @param wuerfelZahl gewuerfelte Zahl
+     * @param anzahlFelder moegliche anzahl felder nach checkActions
      * @param playersNumber Nummer des Spielers, der gewuerfelt hat 
      * @param figurNumber Nummer der Spielfigur, die gezogen werden soll
      * @return Positions object, mit den neuen Positionen aller Figuren
      */
-    public Positions moveFigur(int wuerfelZahl, int playersNumber, int figurNumber) {
+    public Positions moveFigur(int anzahlFelder, int playersNumber, int figurNumber) {
         if(players[playersNumber].positions[figurNumber] == 0){
             //stelle Figur raus
             players[playersNumber].positions[figurNumber] = 1;
         }else{
             //stelle Figur (wuerfelZahl) Felder weiter
-            players[playersNumber].positions[figurNumber] += wuerfelZahl;
+            players[playersNumber].positions[figurNumber] += anzahlFelder;
         }
         
         int newPosition = players[playersNumber].generalPosition(figurNumber);
@@ -98,21 +87,4 @@ public class Game {
         return new Positions(players);
     }
     
-    /**
-     * stellt eine Figur auf das Spielfeld
-     * @param playersNumber Nummer des Spielers, der gewuerfelt hat
-     * @return Positions object, mit den neuen Positionen aller Figuren
-     */
-    public Positions figurRausstellen(int playersNumber){
-        for(int i = 0; i < 4; i++){
-            if(players[playersNumber].positions[i] == 0){
-                //stelle figur i raus
-                players[playersNumber].positions[i] = 1;
-                break;
-            }
-        }
-        
-        // return new positions
-        return new Positions(players);
-    }
 }
