@@ -12,8 +12,15 @@ public class Test {
         game.moveFigur(6, 0, 0);
         game.moveFigur(5, 0, 0);
         game.moveFigur(5, 0, 0);
-        Actions actions1 = game.checkActions(6, 1);
-        game.moveFigur(6, 1, 0);
+        game.moveFigur(5, 0, 0);
+        game.moveFigur(5, 0, 0);
+        game.moveFigur(5, 0, 0);
+        game.moveFigur(5, 0, 0);
+        game.moveFigur(5, 0, 0);
+        game.moveFigur(5, 0, 0);
+        game.figurRausstellen(0);
+        Actions actions1 = game.checkActions(6, 0);
+        //game.moveFigur(6, 1, 0);
         System.out.println("the end");
     }
 

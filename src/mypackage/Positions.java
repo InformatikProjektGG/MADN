@@ -3,6 +3,12 @@ package mypackage;
 
 public class Positions{
     
+    /**
+     * 2d Array mit positionen der Spielfiguren [Nummer des Spielers][Nummer der Spielfigur]
+     * 0 entspricht Startposition
+     * 1-39: Figur auf dem Spielfeld (relativ zum ersten Feld von Spieler 0)
+     * 40-43: Figur in der Endzone
+     */
     int[][] positions;
     
     public Positions(Player[] players){
