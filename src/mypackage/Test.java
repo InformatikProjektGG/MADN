@@ -19,7 +19,8 @@ public class Test {
         game.moveFigur(5, 0, 0);
         
         Actions actions1 = game.checkActions(6, 0);
-        game.moveFigur(actions1.figurZiehen[2], 0, 2);
+        int figur = KI.decideAction(actions1);
+        game.moveFigur(6, 0, figur);
         //game.moveFigur(6, 1, 0);
         System.out.println("the end");
     }
