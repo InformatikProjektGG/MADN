@@ -4,6 +4,8 @@ package mypackage;
 public class Game {
     private Player[] players;
     
+    private int currentPlayer = 0;  //Spieler, der gerade dran ist; Spieler 0 am Anfang
+    
     /**
      * Erstellt neues Spiel; Figuren befinden sich auf den Startpsoitionen
      * @param numPlayers Anzahl der Spieler (inklusive Computer gesteuerter Spieler)
@@ -17,12 +19,12 @@ public class Game {
     }
     
     /**
-     * bestimmt die erlaubten Spielzuege
-     * @param wuerfelZahl gewuerfelte Zahl
+     * wuerfelt und bestimmt die erlaubten Spielzuege
      * @param playersNumber Nummer des Spielers, der gewuerfelt hat
      * @return Actions Object mit zulaessigen Spielzuegen
      */
-    public Actions checkActions(int wuerfelZahl, int playersNumber) {        
+    public Actions nextPlayer() {
+        int wuerfelZahl = (int) Math.round(Math.random() * 6 + 0.5);
         int[] figurZiehen = new int[4];
         for (int figur = 0; figur < 4; figur++) {
             //fuer jede eigene Spielfigur
@@ -30,25 +32,26 @@ public class Game {
             // check if erlaubt
             // check eigene Figuren
             for (int eigeneFigur = 0; eigeneFigur < 4; eigeneFigur++) {
-                if (players[playersNumber].positions[eigeneFigur] == players[playersNumber].positions[figur] + wuerfelZahl) {
-                    //eigene Figur steht bereits auf dem Feld
+                if (players[currentPlayer].positions[eigeneFigur] == players[currentPlayer].positions[figur] + wuerfelZahl) {
+                    //eigene Figur steht bereits auf diesem Feld
                     figurZiehen[figur] = 0;
                     break;
                 }
             }
 
             //check Spielfeld Ende
-            if (players[playersNumber].positions[figur] + wuerfelZahl >= 43) {
+            if (players[currentPlayer].positions[figur] + wuerfelZahl >= 43) {
                 figurZiehen[figur] = 0;
             }
             
             // check noch nicht draussen
-            if (players[playersNumber].positions[figur] == 0) {
+            if (players[currentPlayer].positions[figur] == 0) {
                 figurZiehen[figur] = 1;
             }
         }
         
-        Actions actions = new Actions(figurZiehen);
+        Actions actions = new Actions(figurZiehen, wuerfelZahl, currentPlayer);
+        currentPlayer++;
         return actions;
     }
     
