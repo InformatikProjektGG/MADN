@@ -1,54 +1,113 @@
 package mypackage;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JLabel;
+import javax.swing.Timer;
 
 
 public class MenuListener implements ActionListener {
 
-    Oberflaeche oberflaeche;
 
-    public MenuListener(Oberflaeche oberflaeche) {
-        this.oberflaeche = oberflaeche;
+    public MenuListener() {
     }
 
     public void actionPerformed(ActionEvent e) {
-        System.out.println("hello wolrd");
-        Oberflaeche.hinweisHinzufuegen("hello world");
         switch(e.getActionCommand()){
             case "Wuerfeln":
-                Actions actions = Oberflaeche.game.nextPlayer();
+                Actions actions = Oberflaeche.game.wuerfeln();
+                //Oberflaeche.updateButtonStates(actions);
                 int wuerfelZahl = actions.wuerfelZahl;
                 int player = actions.currentPlayer;
-                Oberflaeche.hinweisHinzufuegen("Spieler " + player + " hat eine " + wuerfelZahl + " gewuerfelt");
-                if (player == 0) {
+                if (Oberflaeche.game.getCurrentPlayer() == 0) {
                     //Spieler ist dran
-                    if ((actions.figurZiehen[0] == 0) && (actions.figurZiehen[1] == 0) && (actions.figurZiehen[2] == 0) && (actions.figurZiehen[3] == 0)) {
-                        Oberflaeche.hinweisHinzufuegen("Leider kannst du keine Figur bewegen");
+                    Oberflaeche.hinweisHinzufuegen("Du hast eine " + wuerfelZahl + " gewuerfelt");
+                    if (actions.keinZugMoeglich) {
+                        if(Oberflaeche.game.getAnzahlWuerfe() < 3){
+                        Oberflaeche.hinweisHinzufuegen("Leider kannst du keine Figur bewegen. Du darfst noch "
+                                + (3 - Oberflaeche.game.getAnzahlWuerfe()) + " einmal wuerfeln");
+                        }else{
+                            //Alle Versuche gescheitert -> naechster spieler
+                            Oberflaeche.hinweisHinzufuegen("Spieler " 
+                                    + Oberflaeche.game.getCurrentPlayer() + " ist jetzt dran");
+                            
+                            wuerfelAutomatisch(1000);
+                        }
+                    }else{
+                        
+                        Oberflaeche.hinweisHinzufuegen("Waehle eine Figur aus, die du bewegen moechtest");
                     }
+                    Oberflaeche.updateButtonStates(actions);
                 } else {
                     //KI ist dran
-                    KI.decideAction(actions, null);
+                    int ausgewaehlteFigur = KI.decideAction(actions, null);
+                    if(ausgewaehlteFigur >= 0 && ausgewaehlteFigur <4){
+                        Positions newPositions = Oberflaeche.game.moveFigur(ausgewaehlteFigur);
+                        Oberflaeche.updatePositions();
+                        Oberflaeche.hinweisHinzufuegen("Spieler " + player 
+                            + " hast seine " + ausgewaehlteFigur + ". Figur um "
+                            + wuerfelZahl + " Felder nach vorne bewegt");
+                    }
+                    
+                    
+                    if(Oberflaeche.game.getCurrentPlayer() != 0){
+                        if(Oberflaeche.game.getIstErneuterVersuch()){
+                            //nicht verzoegern
+                            wuerfelAutomatisch(0);
+                        }else{
+                            wuerfelAutomatisch(2000);
+                        }
+                    }
+                    Oberflaeche.updateButtonStates(null);
                 }
+                //Oberflaeche.updateButtonStates(null);
+                
                 break;
                 
-            case "Start":
+            case "End":
                 System.exit(0);
                 break;
                 
-            case "Figur1":
-                /*Actions actions = oberflaeche.game.checkActions(wuerfelZahl, playerNumber);
-                System.out.println(wuerfelZahl);
-                Actions actions = oberflaeche.game.checkActions(wuerfelZahl, 0);
-                System.out.println(actions.figurRaustellen);
-                if (actions.figurRaustellen == true) {
-                    oberflaeche.game.moveFigur(wuerfelZahl, 0, 0);
-                } else {
-                    System.out.println("Warten Sie, bis die anderen Spieler gew�rfelt haben, und w�rfeln Sie dann erneut!");
-                }*/
+            case "jbutton_figur1":
+                Oberflaeche.game.moveFigur(0);
+                Oberflaeche.updatePositions();
+                //automatisch wuerfeln
+                //actionPerformed(new ActionEvent(this, 0, "Wuerfeln"));
+                wuerfelAutomatisch(1000);
+                break;
+                
+            case "jbutton_figur2":
+                Oberflaeche.game.moveFigur(1);
+                Oberflaeche.updatePositions();
+                wuerfelAutomatisch(1000);
+                break;
+                
+            case "jbtton_figur3":
+                Oberflaeche.game.moveFigur(2);
+                Oberflaeche.updatePositions();
+                wuerfelAutomatisch(1000);
+                break;
+                
+            case "jbutton_figur4":
+                Oberflaeche.game.moveFigur(3);
+                Oberflaeche.updatePositions();
+                wuerfelAutomatisch(1000);
                 break;
         }
+        
+    }
+
+    /**
+     * ruft actionPerformed mit "Wuerfel" command nach delay auf
+     * @param delay laenge der verzoegerung
+     */
+    private void wuerfelAutomatisch(int delay) {
+        Oberflaeche.updateButtonStates(null);
+        new java.util.Timer().schedule(
+                new java.util.TimerTask() {
+            @Override
+            public void run() {
+                actionPerformed(new ActionEvent(this, 0, "Wuerfeln"));
+            }
+        }, delay);
     }
 }

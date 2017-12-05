@@ -2,9 +2,26 @@ package mypackage;
 
 
 public class Game {
-    private Player[] players;
-    
+    public  Player[] players;
+    private int wuerfelZahl;
     private int currentPlayer = 0;  //Spieler, der gerade dran ist; Spieler 0 am Anfang
+    //Anzahl bereits gemachter Wuerfe; beim Rauskommen
+    private int anzahlWuerfe = 0;
+    Positions positions;
+    //true, wenn der Spieler noch einen Wuerfel Versuch hat
+    private boolean istErneuterVersuch = false;
+    
+    public int getCurrentPlayer(){
+        return currentPlayer;
+    }
+    
+    public int getAnzahlWuerfe(){
+        return anzahlWuerfe;
+    }
+    
+    public boolean getIstErneuterVersuch(){
+        return istErneuterVersuch;
+    }
     
     /**
      * Erstellt neues Spiel; Figuren befinden sich auf den Startpsoitionen
@@ -16,6 +33,8 @@ public class Game {
         for (int i = 0; i < numPlayers; i++) {
             players[i] = new Player(i);
         }
+        
+        positions = new Positions(players);
     }
     
     /**
@@ -23,8 +42,8 @@ public class Game {
      * @param playersNumber Nummer des Spielers, der gewuerfelt hat
      * @return Actions Object mit zulaessigen Spielzuegen
      */
-    public Actions nextPlayer() {
-        int wuerfelZahl = (int) Math.round(Math.random() * 6 + 0.5);
+    public Actions wuerfeln() {
+        wuerfelZahl = (int) Math.round(Math.random() * 6 + 0.5);
         int[] figurZiehen = new int[4];
         for (int figur = 0; figur < 4; figur++) {
             //fuer jede eigene Spielfigur
@@ -46,36 +65,51 @@ public class Game {
             
             // check noch nicht draussen
             if (players[currentPlayer].positions[figur] == 0) {
-                figurZiehen[figur] = 1;
+                if(wuerfelZahl == 6){
+                    figurZiehen[figur] = 1;
+                }else figurZiehen[figur] = 0;    
             }
         }
         
         Actions actions = new Actions(figurZiehen, wuerfelZahl, currentPlayer);
-        currentPlayer++;
+        if(actions.keinZugMoeglich){
+            if(anzahlWuerfe < 3){
+                //neuer Versuch
+                anzahlWuerfe++;
+                istErneuterVersuch = true;
+            }else{
+                anzahlWuerfe = 0;
+                istErneuterVersuch = false;
+                naechsterSpieler();
+            }
+            
+        } else{
+            //Zug moeglich -> anzahlWuerfe zuruecksetzen
+            anzahlWuerfe = 0;
+            istErneuterVersuch = false;
+        }
         return actions;
     }
     
     /**
      * bewegt eine Spielfigur; unerlaubte Zuege werden auch durchgefuert!
-     * @param anzahlFelder moegliche anzahl felder nach checkActions
-     * @param playersNumber Nummer des Spielers, der gewuerfelt hat 
-     * @param figurNumber Nummer der Spielfigur, die gezogen werden soll
+     * @param figurNumber Nummer der Spielfigur, die gezogen werden soll (0 bis 3)
      * @return Positions object, mit den neuen Positionen aller Figuren
      */
-    public Positions moveFigur(int anzahlFelder, int playersNumber, int figurNumber) {
-        if(players[playersNumber].positions[figurNumber] == 0){
+    public Positions moveFigur(int figurNumber) {
+        if(players[currentPlayer].positions[figurNumber] == 0){
             //stelle Figur raus
-            players[playersNumber].positions[figurNumber] = 1;
+            players[currentPlayer].positions[figurNumber] = 1;
         }else{
             //stelle Figur (wuerfelZahl) Felder weiter
-            players[playersNumber].positions[figurNumber] += anzahlFelder;
+            players[currentPlayer].positions[figurNumber] += wuerfelZahl;
         }
         
-        int newPosition = players[playersNumber].generalPosition(figurNumber);
+        int newPosition = players[currentPlayer].generalPosition(figurNumber);
 
         // check if gegnerische Figuren geschlagen
         for (int gegner = 0; gegner < 4; gegner++) {
-            if (gegner != playersNumber) {
+            if (gegner != currentPlayer) {
                 for (int figur = 0; figur < 4; figur++) {
                     if (players[gegner].generalPosition(figur) == newPosition) {
                         // gegnerische Figur geschlagen
@@ -86,8 +120,22 @@ public class Game {
             }    
         }
         
+        naechsterSpieler();
+        //update positions object
+        positions = new Positions(players);
         // return new positions
         return new Positions(players);
+    }
+    
+    /**
+     * aendert variable, die den Spieler identifiziert, welcher dran ist
+     */
+    private void naechsterSpieler(){
+        if(currentPlayer >= 3){
+            currentPlayer = 0;
+        }else{
+            currentPlayer++;
+        }
     }
     
 }

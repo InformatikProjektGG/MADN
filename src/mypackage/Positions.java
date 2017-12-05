@@ -14,7 +14,9 @@ public class Positions{
     public Positions(Player[] players){
         this.positions = new int[players.length][4];
         for(int player = 0; player < players.length; player++){
-            this.positions[player] = players[player].positions;
+            for(int figur = 0; figur < 4; figur++){
+                this.positions[player][figur] = players[player].generalPosition(figur);
+            }
         }
     }
 }

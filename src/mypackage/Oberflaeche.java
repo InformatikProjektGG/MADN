@@ -1,13 +1,10 @@
 package mypackage;
 
 import java.awt.*;
-import java.awt.event.*;
 import javax.swing.*;
-import java.io.*;
-import javax.*;
 
 
-public class Oberflaeche extends JFrame {
+public class Oberflaeche {
 
     /*Array, das mit den ersten beiden Koordinaten jedes Spielfeld abdeckt
     und mit der dritten Dimension die x und y Koordinate des jeweiligen Feldes anzeigt*/
@@ -15,68 +12,88 @@ public class Oberflaeche extends JFrame {
     public static boolean[][] is = new boolean[11][11]; //Array, das angibt, welche Felder von xy kein Spielfeld darstellen
     static Container c;
     static JLabel jlabel_hinweis;
+    static JButton jbutton_figur0;
+    static JButton jbutton_figur1;
+    static JButton jbutton_figur2;
+    static JButton jbutton_figur3;
+    static JButton jbutton_wuerfeln;
+    static JFrame jframe;
 
     public static Game game = new Game(4);
 
     public Oberflaeche() {
-        JFrame gui = new JFrame("Mensch �rgere Dich Nicht!");
-        c = getContentPane();
+        
+        jframe = new JFrame("Mensch �rgere Dich Nicht!");
+        //setTitle("Mensch �rgere Dich Nicht!");
+        c = jframe.getContentPane();
         c.setLayout(new BorderLayout());
-        c.setBackground(new Color(252, 228, 150));
+        //c.setBackground(new Color(69, 131, 232));
 
-        //menueErstellen();   //Menue hinzufuegen
         spielfeldErstellen();   //Spielfeld hinzufuegen
-
+        
+        //add JPanel fuer Hinweise
         JPanel jpanel_hinweise = new JPanel();
         jpanel_hinweise.setPreferredSize(new Dimension(660, 40));
         jlabel_hinweis = new JLabel("original: ");
         jpanel_hinweise.add(jlabel_hinweis);
         c.add(jpanel_hinweise, BorderLayout.SOUTH);
         
+        addButtons();
+        
+        jframe.setSize(1080, 720);
+        jframe.setResizable(false);//prevent window resizing
+        jframe.setVisible(true);
+        //updatePositions(new Positions(game.players));
+    }
+    
+    private void addButtons(){
         JPanel jpanel_controlPanel = new JPanel();
         jpanel_controlPanel.setLayout(new GridLayout(10, 1));
-        //add Start button
-        JButton jbutton_start = new JButton("Start");
-        MenuListener bmL = new MenuListener(this);
-        jbutton_start.addActionListener(bmL);
-        jbutton_start.setActionCommand("Start");
+        MenuListener menuListener = new MenuListener();
         
-        JButton jbutton_wuerfeln = new JButton("Wuerfeln");
-        MenuListener cmL = new MenuListener(this);
-        jbutton_wuerfeln.addActionListener(cmL);
+        //add Start button
+        JButton jbutton_end = new JButton("End");
+        jbutton_end.addActionListener(menuListener);
+        jbutton_end.setActionCommand("End");
+        
+        jbutton_wuerfeln = new JButton("Wuerfeln");
+        jbutton_wuerfeln.addActionListener(menuListener);
         jbutton_wuerfeln.setActionCommand("Wuerfeln");
         
-        MenuListener dmL = new MenuListener(this);
+        jbutton_figur0 = new JButton("Figur 1");
+        jbutton_figur0.addActionListener(menuListener);
+        jbutton_figur0.setActionCommand("jbutton_figur1");
         
-        JButton jbutton_figur1 = new JButton("Figur 1");
-        jbutton_figur1.addActionListener(dmL);
-        jbutton_figur1.setActionCommand("jbutton_figur1");
+        jbutton_figur1 = new JButton("Figur 2");
+        jbutton_figur1.addActionListener(menuListener);
+        jbutton_figur1.setActionCommand("jbutton_figur2");
         
-        JButton jbutton_figur2 = new JButton("Figur 2");
-        jbutton_figur2.addActionListener(dmL);
-        jbutton_figur2.setActionCommand("jbutton_figur2");
+        jbutton_figur2 = new JButton("Figur 3");
+        jbutton_figur2.addActionListener(menuListener);
+        jbutton_figur2.setActionCommand("jbutton_figur3");
         
-        JButton jbutton_figur3 = new JButton("Figur 3");
-        jbutton_figur3.addActionListener(dmL);
-        jbutton_figur3.setActionCommand("jbutton_figur3");
-        
-        JButton jbutton_figur4 = new JButton("Figur 4");
-        jbutton_figur4.addActionListener(dmL);
-        jbutton_figur4.setActionCommand("jbutton_figur4");
+        jbutton_figur3 = new JButton("Figur 4");
+        jbutton_figur3.addActionListener(menuListener);
+        jbutton_figur3.setActionCommand("jbutton_figur4");
 
-        jpanel_controlPanel.add(jbutton_start);
+        jpanel_controlPanel.add(jbutton_end);
         jpanel_controlPanel.add(jbutton_wuerfeln);
+        jpanel_controlPanel.add(jbutton_figur0);
         jpanel_controlPanel.add(jbutton_figur1);
         jpanel_controlPanel.add(jbutton_figur2);
         jpanel_controlPanel.add(jbutton_figur3);
-        jpanel_controlPanel.add(jbutton_figur4);
 
         c.add(jpanel_controlPanel, BorderLayout.EAST);
         
+        //disable alle Figuren Buttons
+        jbutton_figur0.setEnabled(false);
+        jbutton_figur1.setEnabled(false);
+        jbutton_figur2.setEnabled(false);
+        jbutton_figur3.setEnabled(false);
     }
 
     public void menueErstellen() {
-        MenuListener mL = new MenuListener(this);
+        MenuListener mL = new MenuListener();
         JMenuBar menueleiste = new JMenuBar();
         JMenu menuFile = new JMenu("Datei");
         JMenu menuHelp = new JMenu("Hilfe");
@@ -94,7 +111,7 @@ public class Oberflaeche extends JFrame {
 
         menueleiste.add(menuFile);
         menueleiste.add(menuHelp);
-        setJMenuBar(menueleiste);
+        jframe.setJMenuBar(menueleiste);
     }
 
     public void spielfeldErstellen() {
@@ -126,11 +143,75 @@ public class Oberflaeche extends JFrame {
         }
         is[5][5] = true;
 
-        add(new Kreis());
+        jframe.add(new SpielbrettCanvas(game.positions));
     }
 
     public static void hinweisHinzufuegen(String text) {
         jlabel_hinweis.setText("Hinweis: " + text);
+    }
+    
+    /**
+     * enables/disables buttons nach actions object
+     * @param actions erlaubte actions des Spielers
+     * Wenn actions==null werden alle Figuren buttons disabled
+     */
+    public static void updateButtonStates(Actions actions) {
+        if (game.getCurrentPlayer() == 0) {
+            jbutton_wuerfeln.setEnabled(true);
+            if (actions != null) {
+                if (actions.figurZiehen[0] != 0) {
+                    jbutton_figur0.setEnabled(true);
+                } else {
+                    jbutton_figur0.setEnabled(false);
+                }
+
+                if (actions.figurZiehen[1] != 0) {
+                    jbutton_figur1.setEnabled(true);
+                } else {
+                    jbutton_figur1.setEnabled(false);
+                }
+
+                if (actions.figurZiehen[2] != 0) {
+                    jbutton_figur2.setEnabled(true);
+                } else {
+                    jbutton_figur2.setEnabled(false);
+                }
+
+                if (actions.figurZiehen[3] != 0) {
+                    jbutton_figur3.setEnabled(true);
+                } else {
+                    jbutton_figur3.setEnabled(false);
+                }
+            }
+        } else {
+            //disable all buttons
+            jbutton_wuerfeln.setEnabled(false);
+            jbutton_figur0.setEnabled(false);
+            jbutton_figur1.setEnabled(false);
+            jbutton_figur2.setEnabled(false);
+            jbutton_figur3.setEnabled(false);
+        }
+
+        
+    }
+
+    /**
+     * updated die gui mit den neuen Positionen der Figuren
+     * @param positions aktuelle Positionen aller Figuren
+     */
+    public static void updatePositions(){
+        //jframe.rem
+        Component[] jframeComponents = c.getComponents();
+        for(int i = 0; i < jframeComponents.length; i++){
+            if(jframeComponents[i] instanceof SpielbrettCanvas){
+                c.remove(i);
+                break;
+            }
+        }
+        
+        c.add(new SpielbrettCanvas(game.positions));
+        jframe.revalidate();
+        jframe.repaint();
     }
 
 }
