@@ -2,7 +2,7 @@ package mypackage;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.Timer;
+import javax.swing.JOptionPane;
 
 
 public class MenuListener implements ActionListener {
@@ -11,20 +11,20 @@ public class MenuListener implements ActionListener {
     public MenuListener() {
     }
 
+    @Override
     public void actionPerformed(ActionEvent e) {
         switch(e.getActionCommand()){
             case "Wuerfeln":
                 Actions actions = Oberflaeche.game.wuerfeln();
-                //Oberflaeche.updateButtonStates(actions);
                 int wuerfelZahl = actions.wuerfelZahl;
                 int player = actions.currentPlayer;
                 if (Oberflaeche.game.getCurrentPlayer() == 0) {
                     //Spieler ist dran
                     Oberflaeche.hinweisHinzufuegen("Du hast eine " + wuerfelZahl + " gewuerfelt");
                     if (actions.keinZugMoeglich) {
-                        if(Oberflaeche.game.getAnzahlWuerfe() < 3){
+                        if(Oberflaeche.game.getAusstehendeWuerfelVersuche() > 0){
                         Oberflaeche.hinweisHinzufuegen("Leider kannst du keine Figur bewegen. Du darfst noch "
-                                + (3 - Oberflaeche.game.getAnzahlWuerfe()) + " einmal wuerfeln");
+                                + Oberflaeche.game.getAusstehendeWuerfelVersuche() + " einmal wuerfeln");
                         }else{
                             //Alle Versuche gescheitert -> naechster spieler
                             Oberflaeche.hinweisHinzufuegen("Spieler " 
@@ -42,7 +42,7 @@ public class MenuListener implements ActionListener {
                     int ausgewaehlteFigur = KI.decideAction(actions, null);
                     if(ausgewaehlteFigur >= 0 && ausgewaehlteFigur <4){
                         Positions newPositions = Oberflaeche.game.moveFigur(ausgewaehlteFigur);
-                        Oberflaeche.updatePositions();
+                        //Oberflaeche.updatePositions();
                         Oberflaeche.hinweisHinzufuegen("Spieler " + player 
                             + " hast seine " + ausgewaehlteFigur + ". Figur um "
                             + wuerfelZahl + " Felder nach vorne bewegt");
@@ -59,8 +59,7 @@ public class MenuListener implements ActionListener {
                     }
                     Oberflaeche.updateButtonStates(null);
                 }
-                //Oberflaeche.updateButtonStates(null);
-                
+                Oberflaeche.updateSpielbrett();
                 break;
                 
             case "End":
@@ -69,31 +68,37 @@ public class MenuListener implements ActionListener {
                 
             case "jbutton_figur1":
                 Oberflaeche.game.moveFigur(0);
-                Oberflaeche.updatePositions();
-                //automatisch wuerfeln
-                //actionPerformed(new ActionEvent(this, 0, "Wuerfeln"));
+                Oberflaeche.updateSpielbrett();
                 wuerfelAutomatisch(1000);
                 break;
                 
             case "jbutton_figur2":
                 Oberflaeche.game.moveFigur(1);
-                Oberflaeche.updatePositions();
+                Oberflaeche.updateSpielbrett();
                 wuerfelAutomatisch(1000);
                 break;
                 
-            case "jbtton_figur3":
+            case "jbutton_figur3":
                 Oberflaeche.game.moveFigur(2);
-                Oberflaeche.updatePositions();
+                Oberflaeche.updateSpielbrett();
                 wuerfelAutomatisch(1000);
                 break;
                 
             case "jbutton_figur4":
                 Oberflaeche.game.moveFigur(3);
-                Oberflaeche.updatePositions();
+                Oberflaeche.updateSpielbrett();
                 wuerfelAutomatisch(1000);
                 break;
         }
-        
+        if(Oberflaeche.game.getGewinner() >= 0){
+            //Spiel zuende
+            if(Oberflaeche.game.getGewinner() == 0){
+                JOptionPane.showMessageDialog(null, "Glueckwunsch! Du hast gewonnen");
+            }else{
+                JOptionPane.showMessageDialog(null, "Du hast leider verloren");
+            }
+            
+        }
     }
 
     /**

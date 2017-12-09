@@ -6,21 +6,30 @@ public class Game {
     private int wuerfelZahl;
     private int currentPlayer = 0;  //Spieler, der gerade dran ist; Spieler 0 am Anfang
     //Anzahl bereits gemachter Wuerfe; beim Rauskommen
-    private int anzahlWuerfe = 0;
+    private int ausstehendeWuerfelVersuche = -1;
     Positions positions;
     //true, wenn der Spieler noch einen Wuerfel Versuch hat
     private boolean istErneuterVersuch = false;
+    private int gewinner = -1; //Sieger (0-3); -1, wenn noch niemand gewonnen hat
     
     public int getCurrentPlayer(){
         return currentPlayer;
     }
     
-    public int getAnzahlWuerfe(){
-        return anzahlWuerfe;
+    public int getAusstehendeWuerfelVersuche(){
+        return ausstehendeWuerfelVersuche;
     }
     
     public boolean getIstErneuterVersuch(){
         return istErneuterVersuch;
+    }
+    
+    public int getWuerfelZahl(){
+        return wuerfelZahl;
+    }
+    
+    public int getGewinner(){
+        return gewinner;
     }
     
     /**
@@ -59,33 +68,47 @@ public class Game {
             }
 
             //check Spielfeld Ende
-            if (players[currentPlayer].positions[figur] + wuerfelZahl >= 43) {
+            if (players[currentPlayer].positions[figur] + wuerfelZahl > 43) {
                 figurZiehen[figur] = 0;
             }
             
             // check noch nicht draussen
             if (players[currentPlayer].positions[figur] == 0) {
-                if(wuerfelZahl == 6){
+                if (wuerfelZahl == 6) {
                     figurZiehen[figur] = 1;
-                }else figurZiehen[figur] = 0;    
+                    //check if eine eigene Figur bereits auf dem Feld 1 steht
+                    for (int eigeneFigur = 0; eigeneFigur < 4; eigeneFigur++) {
+                        if (players[currentPlayer].positions[eigeneFigur] == 1) {
+                            //eigene Figur steht bereits auf diesem Feld
+                            figurZiehen[figur] = 0;
+                            break;
+                        }
+                    }
+                } else {
+                    figurZiehen[figur] = 0;
+                }
             }
         }
         
         Actions actions = new Actions(figurZiehen, wuerfelZahl, currentPlayer);
-        if(actions.keinZugMoeglich){
-            if(anzahlWuerfe < 3){
-                //neuer Versuch
-                anzahlWuerfe++;
-                istErneuterVersuch = true;
-            }else{
-                anzahlWuerfe = 0;
-                istErneuterVersuch = false;
-                naechsterSpieler();
+        if(actions.keinZugMoeglich) {
+            if (players[currentPlayer].keineFigurDraussen()) {
+                if(ausstehendeWuerfelVersuche < 0){
+                    ausstehendeWuerfelVersuche = 3;
+                }
+                ausstehendeWuerfelVersuche--;
+                if (ausstehendeWuerfelVersuche > 0) {
+                    //neuer Versuch
+                    istErneuterVersuch = true;
+                } else {
+                    ausstehendeWuerfelVersuche = 0;
+                    istErneuterVersuch = false;
+                    naechsterSpieler();
+                }
             }
-            
         } else{
-            //Zug moeglich -> anzahlWuerfe zuruecksetzen
-            anzahlWuerfe = 0;
+            //Zug moeglich -> ausstehendeWuerfelVersuche zuruecksetzen
+            ausstehendeWuerfelVersuche = -1;
             istErneuterVersuch = false;
         }
         return actions;
@@ -120,6 +143,19 @@ public class Game {
             }    
         }
         
+        //check if currentPlayer schon gewonnen hat
+        boolean hatGewonnen = true;
+        for(int figur = 0; figur < 4; figur++){
+            if(players[currentPlayer].positions[figur] <= 41){
+                hatGewonnen = false;
+                break;
+            }
+        }
+        if(hatGewonnen){
+            gewinner = currentPlayer;
+        }
+        
+        
         naechsterSpieler();
         //update positions object
         positions = new Positions(players);
@@ -136,6 +172,7 @@ public class Game {
         }else{
             currentPlayer++;
         }
+        wuerfelZahl = -1;   //reset wuerfelZahl
     }
     
 }

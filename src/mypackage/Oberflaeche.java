@@ -44,6 +44,11 @@ public class Oberflaeche {
         jframe.setResizable(false);//prevent window resizing
         jframe.setVisible(true);
         //updatePositions(new Positions(game.players));
+        
+        /*game.players[0].positions[0] = 40;
+        game.players[0].positions[1] = 41;
+        game.players[0].positions[2] = 36;
+        game.players[0].positions[3] = 39;*/
     }
     
     private void addButtons(){
@@ -143,7 +148,7 @@ public class Oberflaeche {
         }
         is[5][5] = true;
 
-        jframe.add(new SpielbrettCanvas(game.positions));
+        jframe.add(new SpielbrettCanvas(game));
     }
 
     public static void hinweisHinzufuegen(String text) {
@@ -196,20 +201,22 @@ public class Oberflaeche {
     }
 
     /**
-     * updated die gui mit den neuen Positionen der Figuren
-     * @param positions aktuelle Positionen aller Figuren
+     * updated das Spielbrett mit dem neuen Spielstand
      */
-    public static void updatePositions(){
-        //jframe.rem
-        Component[] jframeComponents = c.getComponents();
-        for(int i = 0; i < jframeComponents.length; i++){
-            if(jframeComponents[i] instanceof SpielbrettCanvas){
-                c.remove(i);
+    public static void updateSpielbrett(){
+        for(int i = 0; i < c.getComponentCount() - 1; i++){
+            if(c.getComponents()[i] instanceof SpielbrettCanvas){
+                try{
+                    c.remove(i);
+                }catch(Exception e){
+                    System.out.print(e);
+                }
+                
                 break;
             }
         }
         
-        c.add(new SpielbrettCanvas(game.positions));
+        c.add(new SpielbrettCanvas(game));
         jframe.revalidate();
         jframe.repaint();
     }

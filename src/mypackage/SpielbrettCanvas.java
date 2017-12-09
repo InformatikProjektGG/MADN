@@ -4,65 +4,65 @@ package mypackage;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 public class SpielbrettCanvas extends Canvas {
     
-    Positions positions;
-    public SpielbrettCanvas(Positions positions){
-        this.positions = positions;
+    Game game;
+    
+    public SpielbrettCanvas(Game game){
+        this.game = game;
     }
     
     public void paint(Graphics g) {
         g.setColor(Color.white);
         for (int i = 0; i <= 10; i++) {
             for (int s = 0; s <= 10; s++) {
-                g.setColor(Color.black);
-                g.fillOval(Oberflaeche.xy[i][s][0], Oberflaeche.xy[i][s][1], 42, 42);
-                g.setColor(Color.white);
-                if ((i == 0 || i == 1) && (s == 0 || s == 1)) {
-                    g.setColor(Color.red);
-                }
-                if ((s == 5) && (i == 1 || i == 2 || i == 3 || i == 4)) {
-                    g.setColor(Color.red);
-                }
-                if (i == 0 && s == 4) {
-                    g.setColor(new Color(255, 160, 160));
-                }
-                if ((i == 9 || i == 10) && (s == 9 || s == 10)) {
-                    g.setColor(Color.green);
-                }
-                if ((s == 5) && (i == 6 || i == 7 || i == 8 || i == 9)) {
-                    g.setColor(Color.green);
-                }
-                if (i == 10 && s == 6) {
-                    g.setColor(new Color(160, 255, 160));
-                }
-                if ((i == 9 || i == 10) && (s == 0 || s == 1)) {
-                    g.setColor(Color.blue);
-                }
-                if ((i == 5) && (s == 1 || s == 2 || s == 3 || s == 4)) {
-                    g.setColor(Color.blue);
-                }
-                if (i == 6 && s == 0) {
-                    g.setColor(new Color(160, 160, 255));
-                }
-                if ((s == 9 || s == 10) && (i == 0 || i == 1)) {
-                    g.setColor(Color.yellow);
-                }
-                if ((i == 5) && (s == 6 || s == 7 || s == 8 || s == 9)) {
-                    g.setColor(Color.yellow);
-                }
-                if (i == 4 && s == 10) {
-                    g.setColor(new Color(255, 255, 160));
-                }
-                g.fillOval(Oberflaeche.xy[i][s][0], Oberflaeche.xy[i][s][1], 40, 40);
-                g.setColor(Color.white);
-            }
-        }
-        for (int u = 0; u <= 10; u++) {
-            for (int v = 0; v <= 10; v++) {
-                if (Oberflaeche.is[u][v] == true) {
-                    g.clearRect(Oberflaeche.xy[u][v][0], Oberflaeche.xy[u][v][1], 42, 42);
+                if (Oberflaeche.is[i][s] == false) {
+                    g.setColor(Color.black);
+                    g.fillOval(Oberflaeche.xy[i][s][0], Oberflaeche.xy[i][s][1], 42, 42);
+                    g.setColor(Color.white);
+                    if ((i == 0 || i == 1) && (s == 0 || s == 1)) {
+                        g.setColor(Color.red);
+                    }
+                    if ((s == 5) && (i == 1 || i == 2 || i == 3 || i == 4)) {
+                        g.setColor(Color.red);
+                    }
+                    if (i == 0 && s == 4) {
+                        g.setColor(new Color(255, 160, 160));
+                    }
+                    if ((i == 9 || i == 10) && (s == 9 || s == 10)) {
+                        g.setColor(Color.green);
+                    }
+                    if ((s == 5) && (i == 6 || i == 7 || i == 8 || i == 9)) {
+                        g.setColor(Color.green);
+                    }
+                    if (i == 10 && s == 6) {
+                        g.setColor(new Color(160, 255, 160));
+                    }
+                    if ((i == 9 || i == 10) && (s == 0 || s == 1)) {
+                        g.setColor(Color.blue);
+                    }
+                    if ((i == 5) && (s == 1 || s == 2 || s == 3 || s == 4)) {
+                        g.setColor(Color.blue);
+                    }
+                    if (i == 6 && s == 0) {
+                        g.setColor(new Color(160, 160, 255));
+                    }
+                    if ((s == 9 || s == 10) && (i == 0 || i == 1)) {
+                        g.setColor(Color.yellow);
+                    }
+                    if ((i == 5) && (s == 6 || s == 7 || s == 8 || s == 9)) {
+                        g.setColor(Color.yellow);
+                    }
+                    if (i == 4 && s == 10) {
+                        g.setColor(new Color(255, 255, 160));
+                    }
+                    g.fillOval(Oberflaeche.xy[i][s][0], Oberflaeche.xy[i][s][1], 40, 40);
+                    g.setColor(Color.white);
                 }
             }
         }
@@ -91,7 +91,7 @@ public class SpielbrettCanvas extends Canvas {
                         break;
                 }
                 
-                int position = positions.positions[player][figur];
+                int position = game.positions.positions[player][figur];
                 int figurX = 0;
                 int figurY = 0;
                 if(position == 0){
@@ -110,6 +110,30 @@ public class SpielbrettCanvas extends Canvas {
                         figurX += 1;
                         figurY += 1;
                     }
+                }else if(position >= 41 && position <= 44){
+                    //Figur befindet sich in der endzone
+                    switch(player){
+                    case 0:
+                        //red player
+                        figurX = position - 40;
+                        figurY = 5;
+                        break;
+                    case 1:
+                        //blue player
+                        figurX = 5;
+                        figurY = position - 40;
+                        break;
+                    case 2:
+                        //green player
+                        figurX = 44 - position + 6;
+                        figurY = 5;
+                        break;
+                    case 3:
+                        //yellow player
+                        figurX = 5;
+                        figurY = 44 - position + 6;
+                        break;
+                }
                 }else{
                     //find X coordinate
                     if(position >= 1 && position <= 5){
@@ -143,7 +167,7 @@ public class SpielbrettCanvas extends Canvas {
                     }
                     if(position >= 26 && position <= 28){
                         figurX = 6;
-                        figurY = position - 26 + 6;
+                        figurY = position - 26 + 7;
                     }
                     if(position >= 29 && position <= 31){
                         figurX = 31 - position + 4;
@@ -165,6 +189,23 @@ public class SpielbrettCanvas extends Canvas {
                 
                 //figur zeichnen
                 g.fillRect(Oberflaeche.xy[figurX][figurY][0] + 5, Oberflaeche.xy[figurX][figurY][1] + 5, 30, 30);
+            }
+        }
+
+        //wuerfelZahl anzeigen, wenn Spieler0 dran ist
+        if (game.getCurrentPlayer() == 0) {
+            int wuerfelZahl = game.getWuerfelZahl();
+            if (wuerfelZahl >= 0 && wuerfelZahl <= 6) {
+                //Wuerfel zeichnen
+                BufferedImage img = null;
+                try {
+                    img = ImageIO.read(new File("src/images/Wuerfel" + wuerfelZahl + ".png"));
+                } catch (IOException e) {
+                }
+                //positioniere Wuerfel rechts vom Spielfeld
+                int wuerfelX = Oberflaeche.xy[10][3][0] + Oberflaeche.xy[3][3][0];
+                int wuerfelY = Oberflaeche.xy[10][3][1];
+                g.drawImage(img, wuerfelX, wuerfelY, null);
             }
         }
     }
