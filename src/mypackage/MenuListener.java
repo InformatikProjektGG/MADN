@@ -23,20 +23,23 @@ public class MenuListener implements ActionListener {
                     Oberflaeche.hinweisHinzufuegen("Du hast eine " + wuerfelZahl + " gewuerfelt");
                     if (actions.keinZugMoeglich) {
                         if(Oberflaeche.game.getAusstehendeWuerfelVersuche() > 0){
-                        Oberflaeche.hinweisHinzufuegen("Leider kannst du keine Figur bewegen. Du darfst noch "
+                            Oberflaeche.hinweisHinzufuegen("Leider kannst du keine Figur bewegen. Du darfst noch "
                                 + Oberflaeche.game.getAusstehendeWuerfelVersuche() + " einmal wuerfeln");
+                            Oberflaeche.updateButtonStates(null);
                         }else{
                             //Alle Versuche gescheitert -> naechster spieler
                             Oberflaeche.hinweisHinzufuegen("Spieler " 
                                     + Oberflaeche.game.getCurrentPlayer() + " ist jetzt dran");
                             
                             wuerfelAutomatisch(1000);
+                            Oberflaeche.updateButtonStates(null);
                         }
                     }else{
                         
                         Oberflaeche.hinweisHinzufuegen("Waehle eine Figur aus, die du bewegen moechtest");
+                        Oberflaeche.updateButtonStates(actions);
                     }
-                    Oberflaeche.updateButtonStates(actions);
+                    
                 } else {
                     //KI ist dran
                     int ausgewaehlteFigur = KI.decideAction(actions, null);

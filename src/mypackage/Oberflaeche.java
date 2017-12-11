@@ -49,6 +49,8 @@ public class Oberflaeche {
         game.players[0].positions[1] = 41;
         game.players[0].positions[2] = 36;
         game.players[0].positions[3] = 39;*/
+        
+        hinweisHinzufuegen("Du darfs jetzt wuerfeln!");
     }
     
     private void addButtons(){
@@ -161,7 +163,49 @@ public class Oberflaeche {
      * Wenn actions==null werden alle Figuren buttons disabled
      */
     public static void updateButtonStates(Actions actions) {
-        if (game.getCurrentPlayer() == 0) {
+        if(actions == null){
+            jbutton_figur0.setEnabled(false);
+            jbutton_figur1.setEnabled(false);
+            jbutton_figur2.setEnabled(false);
+            jbutton_figur3.setEnabled(false);
+            
+            //enable wuerfel button, wenn Spieler dran ist
+            if (game.getCurrentPlayer() == 0) {
+                jbutton_wuerfeln.setEnabled(true);
+            }else{
+                jbutton_wuerfeln.setEnabled(false);
+            }
+        }else{
+            if (game.getCurrentPlayer() == 0) {
+                //disable wuerfel button, da actions bereits verfuegbar ist
+                jbutton_wuerfeln.setEnabled(false);
+                //enable buttons fuer figuren, welche gezogen werden koennen
+                if (actions.figurZiehen[0] != 0) {
+                    jbutton_figur0.setEnabled(true);
+                } else {
+                    jbutton_figur0.setEnabled(false);
+                }
+
+                if (actions.figurZiehen[1] != 0) {
+                    jbutton_figur1.setEnabled(true);
+                } else {
+                    jbutton_figur1.setEnabled(false);
+                }
+
+                if (actions.figurZiehen[2] != 0) {
+                    jbutton_figur2.setEnabled(true);
+                } else {
+                    jbutton_figur2.setEnabled(false);
+                }
+
+                if (actions.figurZiehen[3] != 0) {
+                    jbutton_figur3.setEnabled(true);
+                } else {
+                    jbutton_figur3.setEnabled(false);
+                }
+            }
+        }
+        /*if (game.getCurrentPlayer() == 0) {
             jbutton_wuerfeln.setEnabled(true);
             if (actions != null) {
                 if (actions.figurZiehen[0] != 0) {
@@ -195,9 +239,7 @@ public class Oberflaeche {
             jbutton_figur1.setEnabled(false);
             jbutton_figur2.setEnabled(false);
             jbutton_figur3.setEnabled(false);
-        }
-
-        
+        }*/
     }
 
     /**

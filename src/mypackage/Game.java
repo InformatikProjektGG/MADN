@@ -115,7 +115,8 @@ public class Game {
     }
     
     /**
-     * bewegt eine Spielfigur; unerlaubte Zuege werden auch durchgefuert!
+     * bewegt eine Spielfigur und reft naechsterSpieler() auf.
+     * unerlaubte Zuege werden auch durchgefuert!
      * @param figurNumber Nummer der Spielfigur, die gezogen werden soll (0 bis 3)
      * @return Positions object, mit den neuen Positionen aller Figuren
      */
