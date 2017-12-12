@@ -8,8 +8,6 @@ package mypackage;
 public class Start {
 	
     public static void main(String[] args) {
-        Oberflaeche hauptfenster = new Oberflaeche();   //Hauptfenster generieren
-        //hauptfenster.setSize(660, 700);
-        //hauptfenster.setVisible(true);  
+        Oberflaeche hauptfenster = new Oberflaeche();   //Hauptfenster generieren 
     }
 }

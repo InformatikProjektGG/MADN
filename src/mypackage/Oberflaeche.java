@@ -246,14 +246,13 @@ public class Oberflaeche {
      * updated das Spielbrett mit dem neuen Spielstand
      */
     public static void updateSpielbrett(){
-        for(int i = 0; i < c.getComponentCount() - 1; i++){
+        for(int i = 0; i < c.getComponentCount(); i++){
             if(c.getComponents()[i] instanceof SpielbrettCanvas){
                 try{
                     c.remove(i);
                 }catch(Exception e){
                     System.out.print(e);
                 }
-                
                 break;
             }
         }

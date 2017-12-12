@@ -3,10 +3,12 @@ package mypackage;
 
 import java.awt.Canvas;
 import java.awt.Color;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 import javax.imageio.ImageIO;
 
 public class SpielbrettCanvas extends Canvas {
@@ -188,14 +190,21 @@ public class SpielbrettCanvas extends Canvas {
                 }
                 
                 //figur zeichnen
-                g.fillRect(Oberflaeche.xy[figurX][figurY][0] + 5, Oberflaeche.xy[figurX][figurY][1] + 5, 30, 30);
+                int figurXPixels = Oberflaeche.xy[figurX][figurY][0] + 5;
+                int figurYPixels = Oberflaeche.xy[figurX][figurY][1] + 5;
+                g.fillRect(figurXPixels, figurYPixels, 30, 30);
+                
+                //draw Figur Zahl
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 30)); 
+                g.setColor(Color.BLACK);
+                g.drawString(String.valueOf(figur + 1), figurXPixels + 7, figurYPixels + 27);
             }
         }
 
         //wuerfelZahl anzeigen, wenn Spieler0 dran ist
         if (game.getCurrentPlayer() == 0) {
             int wuerfelZahl = game.getWuerfelZahl();
-            if (wuerfelZahl >= 0 && wuerfelZahl <= 6) {
+            if (wuerfelZahl >= 1 && wuerfelZahl <= 6) {
                 //Wuerfel zeichnen
                 BufferedImage img = null;
                 try {
@@ -204,7 +213,8 @@ public class SpielbrettCanvas extends Canvas {
                 }
                 //positioniere Wuerfel rechts vom Spielfeld
                 int wuerfelX = Oberflaeche.xy[10][3][0] + Oberflaeche.xy[3][3][0];
-                int wuerfelY = Oberflaeche.xy[10][3][1];
+                // random y coordinate
+                int wuerfelY = (int) Math.round(Oberflaeche.xy[10][4][1] * (new Random().nextFloat() + 0.5));
                 g.drawImage(img, wuerfelX, wuerfelY, null);
             }
         }
