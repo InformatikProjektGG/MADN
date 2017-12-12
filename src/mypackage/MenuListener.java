@@ -29,7 +29,6 @@ public class MenuListener implements ActionListener {
                             Oberflaeche.hinweisHinzufuegen("Spieler "
                                     + Oberflaeche.game.getCurrentPlayer() + " ist jetzt dran");
 
-                            wuerfelAutomatisch(1000);
                             Oberflaeche.updateButtonStates(null);
                         }
                     } else {

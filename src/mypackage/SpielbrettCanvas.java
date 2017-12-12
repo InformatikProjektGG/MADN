@@ -202,7 +202,8 @@ public class SpielbrettCanvas extends Canvas {
         }
 
         //wuerfelZahl anzeigen, wenn Spieler0 dran ist
-        if (game.getCurrentPlayer() == 0) {
+        boolean gewuerfelt = game.getBereitsGewuerfelt();
+        if ((game.getCurrentPlayer() == 0 && gewuerfelt) || (game.getCurrentPlayer() == 1 && !gewuerfelt)){
             int wuerfelZahl = game.getWuerfelZahl();
             if (wuerfelZahl >= 1 && wuerfelZahl <= 6) {
                 //Wuerfel zeichnen

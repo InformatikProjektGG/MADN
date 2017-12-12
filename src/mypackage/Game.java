@@ -14,6 +14,10 @@ public class Game {
      */
     private boolean istErneuterVersuch = false;
     private int gewinner = -1; //Sieger (0-3); -1, wenn noch niemand gewonnen hat
+    /**
+     * true, wenn der currentPlayer mindestens einmal schon gewuerfelt hat
+     */
+    private boolean hatBereitsGewuerfelt;
 
     public int getCurrentPlayer() {
         return currentPlayer;
@@ -33,6 +37,10 @@ public class Game {
 
     public int getGewinner() {
         return gewinner;
+    }
+    
+    public boolean getBereitsGewuerfelt(){
+        return hatBereitsGewuerfelt;
     }
 
     /**
@@ -63,6 +71,7 @@ public class Game {
         //zufaellige zahl generieren (1-6)
         wuerfelZahl = (int) Math.round(Math.random() * 6 + 0.5);
         ausstehendeWuerfelVersuche--;   //Ein Versuch weniger verbleibend
+        hatBereitsGewuerfelt = true;
         int[] figurZiehen = new int[4];
         for (int figur = 0; figur < 4; figur++) {
             //fuer jede eigene Spielfigur
@@ -178,8 +187,8 @@ public class Game {
         } else {
             currentPlayer++;
         }
-        wuerfelZahl = -1;   //reset wuerfelZahl
-
+        hatBereitsGewuerfelt = false;
+        //Anzahl wuerfelVersuche fuer den naechsten Spieler bestimmen
         if (players[currentPlayer].keineFigurDraussen()) {
             ausstehendeWuerfelVersuche = 3;
         }else{
