@@ -48,15 +48,6 @@ public class MenuListener implements ActionListener {
                                 + " hast seine " + ausgewaehlteFigur + ". Figur um "
                                 + actions.wuerfelZahl + " Felder nach vorne bewegt");
                     }
-
-                    /*if (Oberflaeche.game.getCurrentPlayer() != 0) {
-                        if (Oberflaeche.game.getIstErneuterVersuch()) {
-                            //nicht verzoegern
-                            wuerfelAutomatisch(0);
-                        } else {
-                            wuerfelAutomatisch(2000);
-                        }
-                    }*/
                     Oberflaeche.updateButtonStates(null);
                 }
                 Oberflaeche.updateSpielbrett();
@@ -69,25 +60,25 @@ public class MenuListener implements ActionListener {
             case "jbutton_figur1":
                 Oberflaeche.game.moveFigur(0);
                 Oberflaeche.updateSpielbrett();
-                wuerfelAutomatisch(1000);
+                //wuerfelAutomatisch(1000);
                 break;
 
             case "jbutton_figur2":
                 Oberflaeche.game.moveFigur(1);
                 Oberflaeche.updateSpielbrett();
-                wuerfelAutomatisch(1000);
+                //wuerfelAutomatisch(1000);
                 break;
 
             case "jbutton_figur3":
                 Oberflaeche.game.moveFigur(2);
                 Oberflaeche.updateSpielbrett();
-                wuerfelAutomatisch(1000);
+                //wuerfelAutomatisch(1000);
                 break;
 
             case "jbutton_figur4":
                 Oberflaeche.game.moveFigur(3);
                 Oberflaeche.updateSpielbrett();
-                wuerfelAutomatisch(1000);
+                //wuerfelAutomatisch(1000);
                 break;
         }
         if (Oberflaeche.game.getGewinner() >= 0) {
@@ -100,6 +91,7 @@ public class MenuListener implements ActionListener {
 
         }
 
+        //automatisch wuerfeln, wenn nicht der Spieler dran ist
         if (Oberflaeche.game.getCurrentPlayer() != 0) {
             if (Oberflaeche.game.getIstErneuterVersuch()) {
                 //nicht verzoegern

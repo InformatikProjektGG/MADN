@@ -1,40 +1,45 @@
 package mypackage;
 
-
 public class Game {
-    public  Player[] players;
+
+    public Player[] players;
     private int wuerfelZahl;
     private int currentPlayer = 0;  //Spieler, der gerade dran ist; Spieler 0 am Anfang
     //Anzahl bereits gemachter Wuerfe; beim Rauskommen
     private int ausstehendeWuerfelVersuche = -1;
     Positions positions;
-    //true, wenn der Spieler noch einen Wuerfel Versuch hat
+
+    /**
+     * true, wenn der Spieler noch einen Wuerfel Versuch hat
+     */
     private boolean istErneuterVersuch = false;
     private int gewinner = -1; //Sieger (0-3); -1, wenn noch niemand gewonnen hat
-    
-    public int getCurrentPlayer(){
+
+    public int getCurrentPlayer() {
         return currentPlayer;
     }
-    
-    public int getAusstehendeWuerfelVersuche(){
+
+    public int getAusstehendeWuerfelVersuche() {
         return ausstehendeWuerfelVersuche;
     }
-    
-    public boolean getIstErneuterVersuch(){
+
+    public boolean getIstErneuterVersuch() {
         return istErneuterVersuch;
     }
-    
-    public int getWuerfelZahl(){
+
+    public int getWuerfelZahl() {
         return wuerfelZahl;
     }
-    
-    public int getGewinner(){
+
+    public int getGewinner() {
         return gewinner;
     }
-    
+
     /**
      * Erstellt neues Spiel; Figuren befinden sich auf den Startpsoitionen
-     * @param numPlayers Anzahl der Spieler (inklusive Computer gesteuerter Spieler)
+     *
+     * @param numPlayers Anzahl der Spieler (inklusive Computer gesteuerter
+     * Spieler)
      */
     public Game(int numPlayers) {
         //create players array
@@ -42,17 +47,22 @@ public class Game {
         for (int i = 0; i < numPlayers; i++) {
             players[i] = new Player(i);
         }
-        
+
         positions = new Positions(players);
+        
+        ausstehendeWuerfelVersuche = 3;
     }
-    
+
     /**
      * wuerfelt und bestimmt die erlaubten Spielzuege
+     *
      * @param playersNumber Nummer des Spielers, der gewuerfelt hat
      * @return Actions Object mit zulaessigen Spielzuegen
      */
     public Actions wuerfeln() {
+        //zufaellige zahl generieren (1-6)
         wuerfelZahl = (int) Math.round(Math.random() * 6 + 0.5);
+        ausstehendeWuerfelVersuche--;   //Ein Versuch weniger verbleibend
         int[] figurZiehen = new int[4];
         for (int figur = 0; figur < 4; figur++) {
             //fuer jede eigene Spielfigur
@@ -71,7 +81,7 @@ public class Game {
             if (players[currentPlayer].positions[figur] + wuerfelZahl > 43) {
                 figurZiehen[figur] = 0;
             }
-            
+
             // check noch nicht draussen
             if (players[currentPlayer].positions[figur] == 0) {
                 if (wuerfelZahl == 6) {
@@ -89,46 +99,42 @@ public class Game {
                 }
             }
         }
-        
+
         Actions actions = new Actions(figurZiehen, wuerfelZahl, currentPlayer);
-        if(actions.keinZugMoeglich) {
-            if (players[currentPlayer].keineFigurDraussen()) {
-                if(ausstehendeWuerfelVersuche < 0){
-                    ausstehendeWuerfelVersuche = 3;
-                }
-                ausstehendeWuerfelVersuche--;
-                if (ausstehendeWuerfelVersuche > 0) {
-                    //neuer Versuch
-                    istErneuterVersuch = true;
-                } else {
-                    ausstehendeWuerfelVersuche = 0;
-                    istErneuterVersuch = false;
-                    naechsterSpieler();
-                }
+
+        //ausstehendeWuerfelVersuche berechnen
+        if (actions.keinZugMoeglich) {
+            if(ausstehendeWuerfelVersuche <= 0){
+                naechsterSpieler();
+                istErneuterVersuch = false;
+            }else{
+                istErneuterVersuch = true;
             }
-        } else{
+        } else {
             //Zug moeglich -> ausstehendeWuerfelVersuche zuruecksetzen
-            ausstehendeWuerfelVersuche = -1;
+            //ausstehendeWuerfelVersuche = -1;
             istErneuterVersuch = false;
         }
         return actions;
     }
-    
+
     /**
-     * bewegt eine Spielfigur und reft naechsterSpieler() auf.
-     * unerlaubte Zuege werden auch durchgefuert!
-     * @param figurNumber Nummer der Spielfigur, die gezogen werden soll (0 bis 3)
+     * bewegt eine Spielfigur und reft naechsterSpieler() auf. unerlaubte Zuege
+     * werden auch durchgefuert!
+     *
+     * @param figurNumber Nummer der Spielfigur, die gezogen werden soll (0 bis
+     * 3)
      * @return Positions object, mit den neuen Positionen aller Figuren
      */
     public Positions moveFigur(int figurNumber) {
-        if(players[currentPlayer].positions[figurNumber] == 0){
+        if (players[currentPlayer].positions[figurNumber] == 0) {
             //stelle Figur raus
             players[currentPlayer].positions[figurNumber] = 1;
-        }else{
+        } else {
             //stelle Figur (wuerfelZahl) Felder weiter
             players[currentPlayer].positions[figurNumber] += wuerfelZahl;
         }
-        
+
         int newPosition = players[currentPlayer].generalPosition(figurNumber);
 
         // check if gegnerische Figuren geschlagen
@@ -141,39 +147,44 @@ public class Game {
                         break;
                     }
                 }
-            }    
+            }
         }
-        
+
         //check if currentPlayer schon gewonnen hat
         boolean hatGewonnen = true;
-        for(int figur = 0; figur < 4; figur++){
-            if(players[currentPlayer].positions[figur] <= 41){
+        for (int figur = 0; figur < 4; figur++) {
+            if (players[currentPlayer].positions[figur] <= 41) {
                 hatGewonnen = false;
                 break;
             }
         }
-        if(hatGewonnen){
+        if (hatGewonnen) {
             gewinner = currentPlayer;
         }
-        
-        
+
         naechsterSpieler();
         //update positions object
         positions = new Positions(players);
         // return new positions
         return new Positions(players);
     }
-    
+
     /**
      * aendert variable, die den Spieler identifiziert, welcher dran ist
      */
-    private void naechsterSpieler(){
-        if(currentPlayer >= 3){
+    private void naechsterSpieler() {
+        if (currentPlayer >= 3) {
             currentPlayer = 0;
-        }else{
+        } else {
             currentPlayer++;
         }
         wuerfelZahl = -1;   //reset wuerfelZahl
+
+        if (players[currentPlayer].keineFigurDraussen()) {
+            ausstehendeWuerfelVersuche = 3;
+        }else{
+            ausstehendeWuerfelVersuche = 1;
+        }
     }
-    
+
 }
