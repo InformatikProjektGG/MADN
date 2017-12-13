@@ -209,7 +209,7 @@ public class SpielbrettCanvas extends Canvas {
                 //Wuerfel zeichnen
                 BufferedImage img = null;
                 try {
-                    img = ImageIO.read(new File("src/images/Wuerfel" + wuerfelZahl + ".png"));
+                    img = ImageIO.read(getClass().getResource("images/Wuerfel" + wuerfelZahl + ".png"));
                 } catch (IOException e) {
                 }
                 //positioniere Wuerfel rechts vom Spielfeld

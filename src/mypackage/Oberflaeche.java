@@ -45,10 +45,10 @@ public class Oberflaeche {
         jframe.setVisible(true);
         //updatePositions(new Positions(game.players));
         
-        /*game.players[0].positions[0] = 40;
+        game.players[0].positions[0] = 40;
         game.players[0].positions[1] = 41;
         game.players[0].positions[2] = 36;
-        game.players[0].positions[3] = 39;*/
+        game.players[0].positions[3] = 39;
         
         hinweisHinzufuegen("Du darfs jetzt wuerfeln!");
     }

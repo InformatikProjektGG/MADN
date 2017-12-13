@@ -26,6 +26,7 @@ public class MenuListener implements ActionListener {
                             Oberflaeche.updateButtonStates(null);
                         } else {
                             //Alle Versuche gescheitert -> naechster spieler
+                            Oberflaeche.game.moveFigur(-1);
                             Oberflaeche.hinweisHinzufuegen("Spieler "
                                     + Oberflaeche.game.getCurrentPlayer() + " ist jetzt dran");
 
@@ -40,16 +41,20 @@ public class MenuListener implements ActionListener {
                 } else {
                     //KI ist dran
                     int ausgewaehlteFigur = KI.decideAction(actions, null);
-                    if (ausgewaehlteFigur >= 0 && ausgewaehlteFigur < 4) {
+                    Positions newPositions = Oberflaeche.game.moveFigur(ausgewaehlteFigur);
+                    /*if (ausgewaehlteFigur >= 0 && ausgewaehlteFigur < 4) {
                         Positions newPositions = Oberflaeche.game.moveFigur(ausgewaehlteFigur);
                         //Oberflaeche.updatePositions();
-                        Oberflaeche.hinweisHinzufuegen("Spieler " + Oberflaeche.game.getCurrentPlayer()
+                        Oberflaeche.hinweisHinzufuegen("Spieler " + (Oberflaeche.game.getCurrentPlayer() - 1)
                                 + " hast seine " + ausgewaehlteFigur + ". Figur um "
                                 + actions.wuerfelZahl + " Felder nach vorne bewegt");
-                    }
+                    }*/
                     Oberflaeche.updateButtonStates(null);
                 }
                 Oberflaeche.updateSpielbrett();
+                if(Oberflaeche.game.getCurrentPlayer() == 0 && (actions.keinZugMoeglich || !Oberflaeche.game.getBereitsGewuerfelt())){
+                    Oberflaeche.hinweisHinzufuegen("Bitte Wuerfeln");
+                }
                 break;
 
             case "End":
@@ -84,6 +89,7 @@ public class MenuListener implements ActionListener {
             //Spiel zuende
             if (Oberflaeche.game.getGewinner() == 0) {
                 JOptionPane.showMessageDialog(null, "Glueckwunsch! Du hast gewonnen");
+                System.exit(0);
             } else {
                 JOptionPane.showMessageDialog(null, "Du hast leider verloren");
             }
@@ -96,7 +102,7 @@ public class MenuListener implements ActionListener {
                 //nicht verzoegern
                 wuerfelAutomatisch(0);
             } else {
-                wuerfelAutomatisch(2000);
+                wuerfelAutomatisch(500);
             }
         }
     }

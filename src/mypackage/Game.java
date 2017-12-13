@@ -87,7 +87,7 @@ public class Game {
             }
 
             //check Spielfeld Ende
-            if (players[currentPlayer].positions[figur] + wuerfelZahl > 43) {
+            if (players[currentPlayer].positions[figur] + wuerfelZahl > 44) {
                 figurZiehen[figur] = 0;
             }
 
@@ -114,7 +114,7 @@ public class Game {
         //ausstehendeWuerfelVersuche berechnen
         if (actions.keinZugMoeglich) {
             if(ausstehendeWuerfelVersuche <= 0){
-                naechsterSpieler();
+                //naechsterSpieler();
                 istErneuterVersuch = false;
             }else{
                 istErneuterVersuch = true;
@@ -132,10 +132,19 @@ public class Game {
      * werden auch durchgefuert!
      *
      * @param figurNumber Nummer der Spielfigur, die gezogen werden soll (0 bis
-     * 3)
+     * 3), ansonsten ist der naechste Spieler dran
      * @return Positions object, mit den neuen Positionen aller Figuren
      */
     public Positions moveFigur(int figurNumber) {
+        if(figurNumber < 0 || figurNumber > 3){
+            if(ausstehendeWuerfelVersuche <= 0){
+                naechsterSpieler();
+                istErneuterVersuch = false;
+            }else{
+                istErneuterVersuch = true;
+            }
+            return new Positions(players);
+        }
         if (players[currentPlayer].positions[figurNumber] == 0) {
             //stelle Figur raus
             players[currentPlayer].positions[figurNumber] = 1;
@@ -150,7 +159,7 @@ public class Game {
         for (int gegner = 0; gegner < 4; gegner++) {
             if (gegner != currentPlayer) {
                 for (int figur = 0; figur < 4; figur++) {
-                    if (players[gegner].generalPosition(figur) == newPosition) {
+                    if (players[gegner].generalPosition(figur) == newPosition && newPosition <= 40) {
                         // gegnerische Figur geschlagen
                         players[gegner].positions[figur] = 0;
                         break;
@@ -162,7 +171,7 @@ public class Game {
         //check if currentPlayer schon gewonnen hat
         boolean hatGewonnen = true;
         for (int figur = 0; figur < 4; figur++) {
-            if (players[currentPlayer].positions[figur] <= 41) {
+            if (players[currentPlayer].positions[figur] < 41) {
                 hatGewonnen = false;
                 break;
             }
