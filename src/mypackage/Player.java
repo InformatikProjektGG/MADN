@@ -27,7 +27,7 @@ public class Player {
     // gibt position der Figur zurueck aus der Sicht von Spieler 0
     public int generalPosition(int figur) {
         int generalPositions = positions[figur];
-        if (positions[figur] > 0 && positions[figur] < 40) {
+        if (positions[figur] >= 1 && positions[figur] <= 40) {
             generalPositions = positions[figur] + num * 10;
             //sicherstellen, dass generalPosition kleiner als 41 ist
             if (generalPositions > 40) {

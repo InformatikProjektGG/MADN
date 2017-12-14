@@ -89,11 +89,10 @@ public class MenuListener implements ActionListener {
             //Spiel zuende
             if (Oberflaeche.game.getGewinner() == 0) {
                 JOptionPane.showMessageDialog(null, "Glueckwunsch! Du hast gewonnen");
-                System.exit(0);
             } else {
                 JOptionPane.showMessageDialog(null, "Du hast leider verloren");
             }
-
+            System.exit(0);
         }
 
         //automatisch wuerfeln, wenn nicht der Spieler dran ist
@@ -102,7 +101,7 @@ public class MenuListener implements ActionListener {
                 //nicht verzoegern
                 wuerfelAutomatisch(0);
             } else {
-                wuerfelAutomatisch(500);
+                wuerfelAutomatisch(1000);
             }
         }
     }
