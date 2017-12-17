@@ -6,9 +6,6 @@ import javax.swing.JOptionPane;
 
 public class MenuListener implements ActionListener {
 
-    public MenuListener() {
-    }
-
     @Override
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
@@ -41,14 +38,7 @@ public class MenuListener implements ActionListener {
                 } else {
                     //KI ist dran
                     int ausgewaehlteFigur = KI.decideAction(actions, null);
-                    Positions newPositions = Oberflaeche.game.moveFigur(ausgewaehlteFigur);
-                    /*if (ausgewaehlteFigur >= 0 && ausgewaehlteFigur < 4) {
-                        Positions newPositions = Oberflaeche.game.moveFigur(ausgewaehlteFigur);
-                        //Oberflaeche.updatePositions();
-                        Oberflaeche.hinweisHinzufuegen("Spieler " + (Oberflaeche.game.getCurrentPlayer() - 1)
-                                + " hast seine " + ausgewaehlteFigur + ". Figur um "
-                                + actions.wuerfelZahl + " Felder nach vorne bewegt");
-                    }*/
+                    Oberflaeche.game.moveFigur(ausgewaehlteFigur);
                     Oberflaeche.updateButtonStates(null);
                 }
                 Oberflaeche.updateSpielbrett();
@@ -64,25 +54,21 @@ public class MenuListener implements ActionListener {
             case "jbutton_figur1":
                 Oberflaeche.game.moveFigur(0);
                 Oberflaeche.updateSpielbrett();
-                //wuerfelAutomatisch(1000);
                 break;
 
             case "jbutton_figur2":
                 Oberflaeche.game.moveFigur(1);
                 Oberflaeche.updateSpielbrett();
-                //wuerfelAutomatisch(1000);
                 break;
 
             case "jbutton_figur3":
                 Oberflaeche.game.moveFigur(2);
                 Oberflaeche.updateSpielbrett();
-                //wuerfelAutomatisch(1000);
                 break;
 
             case "jbutton_figur4":
                 Oberflaeche.game.moveFigur(3);
                 Oberflaeche.updateSpielbrett();
-                //wuerfelAutomatisch(1000);
                 break;
         }
         if (Oberflaeche.game.getGewinner() >= 0) {
@@ -92,6 +78,7 @@ public class MenuListener implements ActionListener {
             } else {
                 JOptionPane.showMessageDialog(null, "Du hast leider verloren");
             }
+            //Programm beenden
             System.exit(0);
         }
 

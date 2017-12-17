@@ -23,7 +23,7 @@ public class Oberflaeche {
 
     public Oberflaeche() {
         
-        jframe = new JFrame("Mensch �rgere Dich Nicht!");
+        jframe = new JFrame("Mensch Ärgere Dich Nicht");
         //setTitle("Mensch �rgere Dich Nicht!");
         c = jframe.getContentPane();
         c.setLayout(new BorderLayout());
@@ -45,7 +45,7 @@ public class Oberflaeche {
         jframe.setVisible(true);
         //updatePositions(new Positions(game.players));
         
-        hinweisHinzufuegen("Du darfs jetzt wuerfeln!");
+        hinweisHinzufuegen("Du darfst jetzt wuerfeln!");
     }
     
     private void addButtons(){

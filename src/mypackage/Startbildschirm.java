@@ -1,6 +1,5 @@
 package mypackage;
 
-import java.*;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.image.BufferedImage;
@@ -16,6 +15,7 @@ import javax.swing.JPanel;
 
 public class Startbildschirm extends JFrame {
 
+    //Container fuer GUI Elemente
     static Container c;
 
     public static void main(String[] args) {
@@ -26,8 +26,8 @@ public class Startbildschirm extends JFrame {
         startbildschirm.setVisible(true);
     }
 
-    Startbildschirm() {
-        setTitle("Test");
+    public Startbildschirm() {
+        setTitle("Mensch Ärgere Dich Nicht");
         c = getContentPane();
         JPanel panel = new JPanel();
         panel.setBackground(new Color(255, 255, 255));
@@ -49,7 +49,7 @@ public class Startbildschirm extends JFrame {
         start.setOpaque(false);
         start.setContentAreaFilled(false);
         start.setBorderPainted(false);
-        ButtonListener buttonstart = new ButtonListener(this);
+        ButtonListener buttonstart = new ButtonListener();
         start.addActionListener(buttonstart);
         start.setActionCommand("Start");
 
@@ -58,7 +58,7 @@ public class Startbildschirm extends JFrame {
         einstellungen.setOpaque(false);
         einstellungen.setContentAreaFilled(false);
         einstellungen.setBorderPainted(false);
-        ButtonListener buttoneinstellungen = new ButtonListener(this);
+        ButtonListener buttoneinstellungen = new ButtonListener();
         einstellungen.addActionListener(buttoneinstellungen);
         einstellungen.setActionCommand("Einstellungen");
 
@@ -67,7 +67,7 @@ public class Startbildschirm extends JFrame {
         hilfe.setOpaque(false);
         hilfe.setContentAreaFilled(false);
         hilfe.setBorderPainted(false);
-        ButtonListener buttonhilfe = new ButtonListener(this);
+        ButtonListener buttonhilfe = new ButtonListener();
         hilfe.addActionListener(buttonhilfe);
         hilfe.setActionCommand("Hilfe");
 
@@ -78,27 +78,4 @@ public class Startbildschirm extends JFrame {
         c.add(panel);
 
     }
-
-    /*NichtGenutzterQuellcode() {
-		
-		panel1.add(startbutton);
-		panel1.add(test);
-		panel1.add(new JLabel(new ImageIcon(pic1)));
-		panel1.add(new JLabel(new ImageIcon(pic2)));
-		
-
-		JPanel panel1 = new JPanel(new FlowLayout());
-		
-		
-		panel1.setBackground(new Color(252, 228, 92));
-		JLabel test = new JLabel("Test");
-		test.setFont(new Font("Arial", Font.BOLD, 50));
-		JButton startbutton = new JButton("Pause");
-		startbutton.setPreferredSize(new Dimension(200,100));
-		
-		java.net.URL resource1 = ImageIcon.class.getResource("C:/Users/Finn/Desktop/rot.png");
-		ImageIcon start1 = new ImageIcon(resource1);
-		JLabel start12 = new JLabel (start1);
-		start1.paintIcon(panel1, getGraphics(), 10, 10);
-	}*/
 }

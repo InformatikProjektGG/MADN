@@ -24,7 +24,11 @@ public class Player {
         }
     }
         
-    // gibt position der Figur zurueck aus der Sicht von Spieler 0
+    /**
+    * Gibt die Position der Figur zurueck aus der Sicht von Spieler 0
+    * @param figur Figur, deren Position bestimmt werden soll
+    * @return 
+    */
     public int generalPosition(int figur) {
         int generalPositions = positions[figur];
         if (positions[figur] >= 1 && positions[figur] <= 40) {
@@ -38,6 +42,10 @@ public class Player {
         return generalPositions;
     }
     
+    /**
+     * 
+     * @return true, wenn sich alle Figuren des Spielers in der Startposition befinden 
+     */
     public boolean keineFigurDraussen(){
         if(positions[0] == 0 && positions[1] == 0 && positions[2] == 0 && positions[3] == 0){
             return true;
