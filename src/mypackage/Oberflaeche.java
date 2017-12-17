@@ -21,7 +21,7 @@ public class Oberflaeche {
     public static Game game = new Game(4);
 
     public Oberflaeche() {
-        jframe = new JFrame("Mensch Ärgere Dich");
+        jframe = new JFrame("Mensch Ärgere Dich Nicht");
         Container c = jframe.getContentPane();
         c.setLayout(new BorderLayout());
         spielfeldErstellen();   //Spielfeld hinzufuegen
