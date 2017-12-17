@@ -10,15 +10,16 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
 public class SpielbrettCanvas extends JPanel {
-    
+
     Game game;
-    
+
     public SpielbrettCanvas(Game game) {
         this.game = game;
     }
-    
+
     @Override
     public void paintComponent(Graphics g) {
+        //clean background
         super.paintComponent(g);
         g.setColor(Color.white);
         for (int i = 0; i <= 10; i++) {
@@ -92,7 +93,7 @@ public class SpielbrettCanvas extends JPanel {
                         g.setColor(new Color(203, 234, 0));
                         break;
                 }
-                
+
                 int position = game.positions.positions[player][figur];
                 int figurX = 0;
                 int figurY = 0;
@@ -150,7 +151,7 @@ public class SpielbrettCanvas extends JPanel {
                         figurX = position - 1;
                         figurY = 4;
                     }
-                    
+
                     if (position >= 6 && position <= 8) {
                         figurX = 4;
                         figurY = 9 - position;
@@ -203,7 +204,7 @@ public class SpielbrettCanvas extends JPanel {
                 g.fillRect(figurXPixels, figurYPixels, 30, 30);
 
                 //draw Figur Zahl
-                g.setFont(new Font("TimesRoman", Font.PLAIN, 30));                
+                g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
                 g.setColor(Color.BLACK);
                 g.drawString(String.valueOf(figur + 1), figurXPixels + 7, figurYPixels + 27);
             }
@@ -224,7 +225,7 @@ public class SpielbrettCanvas extends JPanel {
                 int wuerfelX = Oberflaeche.xy[10][3][0] + Oberflaeche.xy[3][3][0];
                 // random y coordinate
                 int wuerfelY = (int) Math.round(Oberflaeche.xy[10][4][1] * (new Random().nextFloat() + 0.5));
-                g.drawImage(img, wuerfelX, wuerfelY, null);
+                g.drawImage(img, wuerfelX, wuerfelY, this);
             }
         }
     }
