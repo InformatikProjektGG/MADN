@@ -4,27 +4,20 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JOptionPane;
 
-
 public class ButtonListener implements ActionListener {
-    
-	/*Startbildschirm startbildschirm;
-        
-	public ButtonListener(Startbildschirm startbildschirm) {
-		this.startbildschirm = startbildschirm;
-	}*/
-        
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		switch(e.getActionCommand()){
-                    case "Start":
-                        new Oberflaeche();
-                        break;
-                    case "Einstellungen":
-                        System.exit(0);
-                        break;
-                    case "Hilfe":
-                        JOptionPane.showMessageDialog(null, "Spielhilfe");
-                }
-	}
-	
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (e.getActionCommand()) {
+            case "Start":
+                new Oberflaeche();
+                break;
+            case "Einstellungen":
+                System.exit(0);
+                break;
+            case "Hilfe":
+                JOptionPane.showMessageDialog(null, "Spielhilfe");
+        }
+    }
+
 }

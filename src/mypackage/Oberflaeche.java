@@ -3,14 +3,14 @@ package mypackage;
 import java.awt.*;
 import javax.swing.*;
 
-
 public class Oberflaeche {
 
     /*Array, das mit den ersten beiden Koordinaten jedes Spielfeld abdeckt
     und mit der dritten Dimension die x und y Koordinate des jeweiligen Feldes anzeigt*/
-    public static int[][][] xy = new int[11][11][2]; 
+    public static int[][][] xy = new int[11][11][2];
     public static boolean[][] is = new boolean[11][11]; //Array, das angibt, welche Felder von xy kein Spielfeld darstellen
     static Container c;
+    static JPanel jpanel_spielfeld;
     static JLabel jlabel_hinweis;
     static JButton jbutton_figur0;
     static JButton jbutton_figur1;
@@ -22,15 +22,11 @@ public class Oberflaeche {
     public static Game game = new Game(4);
 
     public Oberflaeche() {
-        
         jframe = new JFrame("Mensch Ärgere Dich Nicht");
-        //setTitle("Mensch �rgere Dich Nicht!");
         c = jframe.getContentPane();
         c.setLayout(new BorderLayout());
-        //c.setBackground(new Color(69, 131, 232));
-
         spielfeldErstellen();   //Spielfeld hinzufuegen
-        
+
         //add JPanel fuer Hinweise
         JPanel jpanel_hinweise = new JPanel();
         jpanel_hinweise.setPreferredSize(new Dimension(660, 40));
@@ -38,42 +34,46 @@ public class Oberflaeche {
         jpanel_hinweise.add(jlabel_hinweis);
         c.add(jpanel_hinweise, BorderLayout.SOUTH);
         
+        //add JPanel fuer das Spielfeld
+        jpanel_spielfeld = new SpielbrettCanvas(game);
+        jpanel_spielfeld.setPreferredSize(new Dimension(660, 660));
+        c.add(jpanel_spielfeld, BorderLayout.WEST);
+        
         addButtons();
-        
+
         jframe.setSize(1080, 720);
-        jframe.setResizable(false);//prevent window resizing
+        //jframe.setResizable(false);//prevent window resizing
         jframe.setVisible(true);
-        //updatePositions(new Positions(game.players));
-        
+
         hinweisHinzufuegen("Du darfst jetzt wuerfeln!");
     }
-    
-    private void addButtons(){
+
+    private void addButtons() {
         JPanel jpanel_controlPanel = new JPanel();
         jpanel_controlPanel.setLayout(new GridLayout(10, 1));
         MenuListener menuListener = new MenuListener();
-        
+
         //add Start button
         JButton jbutton_end = new JButton("End");
         jbutton_end.addActionListener(menuListener);
         jbutton_end.setActionCommand("End");
-        
+
         jbutton_wuerfeln = new JButton("Wuerfeln");
         jbutton_wuerfeln.addActionListener(menuListener);
         jbutton_wuerfeln.setActionCommand("Wuerfeln");
-        
+
         jbutton_figur0 = new JButton("Figur 1");
         jbutton_figur0.addActionListener(menuListener);
         jbutton_figur0.setActionCommand("jbutton_figur1");
-        
+
         jbutton_figur1 = new JButton("Figur 2");
         jbutton_figur1.addActionListener(menuListener);
         jbutton_figur1.setActionCommand("jbutton_figur2");
-        
+
         jbutton_figur2 = new JButton("Figur 3");
         jbutton_figur2.addActionListener(menuListener);
         jbutton_figur2.setActionCommand("jbutton_figur3");
-        
+
         jbutton_figur3 = new JButton("Figur 4");
         jbutton_figur3.addActionListener(menuListener);
         jbutton_figur3.setActionCommand("jbutton_figur4");
@@ -86,7 +86,7 @@ public class Oberflaeche {
         jpanel_controlPanel.add(jbutton_figur3);
 
         c.add(jpanel_controlPanel, BorderLayout.EAST);
-        
+
         //disable alle Figuren Buttons
         jbutton_figur0.setEnabled(false);
         jbutton_figur1.setEnabled(false);
@@ -116,6 +116,9 @@ public class Oberflaeche {
         jframe.setJMenuBar(menueleiste);
     }
 
+    /**
+     * berechnet die Koordinaten fuer das Spielfeld
+     */
     public void spielfeldErstellen() {
         for (int i = 0; i <= 10; i++) {
             for (int s = 0; s <= 10; s++) {
@@ -145,32 +148,38 @@ public class Oberflaeche {
         }
         is[5][5] = true;
 
-        jframe.add(new SpielbrettCanvas(game));
+        //jframe.add(new SpielbrettCanvas(game));
     }
 
+    /**
+     * Aendert den Text des Hinweis JLabels
+     *
+     * @param text neuer Text
+     */
     public static void hinweisHinzufuegen(String text) {
         jlabel_hinweis.setText("Hinweis: " + text);
     }
-    
+
     /**
      * enables/disables buttons nach actions object
-     * @param actions erlaubte actions des Spielers
-     * Wenn actions==null werden alle Figuren buttons disabled
+     *
+     * @param actions erlaubte actions des Spielers Wenn actions==null werden
+     * alle Figuren buttons disabled
      */
     public static void updateButtonStates(Actions actions) {
-        if(actions == null){
+        if (actions == null) {
             jbutton_figur0.setEnabled(false);
             jbutton_figur1.setEnabled(false);
             jbutton_figur2.setEnabled(false);
             jbutton_figur3.setEnabled(false);
-            
+
             //enable wuerfel button, wenn Spieler dran ist
             if (game.getCurrentPlayer() == 0) {
                 jbutton_wuerfeln.setEnabled(true);
-            }else{
+            } else {
                 jbutton_wuerfeln.setEnabled(false);
             }
-        }else{
+        } else {
             if (game.getCurrentPlayer() == 0) {
                 //disable wuerfel button, da actions bereits verfuegbar ist
                 jbutton_wuerfeln.setEnabled(false);
@@ -200,61 +209,12 @@ public class Oberflaeche {
                 }
             }
         }
-        /*if (game.getCurrentPlayer() == 0) {
-            jbutton_wuerfeln.setEnabled(true);
-            if (actions != null) {
-                if (actions.figurZiehen[0] != 0) {
-                    jbutton_figur0.setEnabled(true);
-                } else {
-                    jbutton_figur0.setEnabled(false);
-                }
-
-                if (actions.figurZiehen[1] != 0) {
-                    jbutton_figur1.setEnabled(true);
-                } else {
-                    jbutton_figur1.setEnabled(false);
-                }
-
-                if (actions.figurZiehen[2] != 0) {
-                    jbutton_figur2.setEnabled(true);
-                } else {
-                    jbutton_figur2.setEnabled(false);
-                }
-
-                if (actions.figurZiehen[3] != 0) {
-                    jbutton_figur3.setEnabled(true);
-                } else {
-                    jbutton_figur3.setEnabled(false);
-                }
-            }
-        } else {
-            //disable all buttons
-            jbutton_wuerfeln.setEnabled(false);
-            jbutton_figur0.setEnabled(false);
-            jbutton_figur1.setEnabled(false);
-            jbutton_figur2.setEnabled(false);
-            jbutton_figur3.setEnabled(false);
-        }*/
     }
 
     /**
      * updated das Spielbrett mit dem neuen Spielstand
      */
-    public static void updateSpielbrett(){
-        for(int i = 0; i < c.getComponentCount(); i++){
-            if(c.getComponents()[i] instanceof SpielbrettCanvas){
-                try{
-                    c.remove(i);
-                }catch(Exception e){
-                    System.out.print(e);
-                }
-                break;
-            }
-        }
-        
-        c.add(new SpielbrettCanvas(game));
-        jframe.revalidate();
-        jframe.repaint();
+    public static void updateSpielbrett() {
+        jpanel_spielfeld.repaint();
     }
-
 }

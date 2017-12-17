@@ -42,7 +42,7 @@ public class MenuListener implements ActionListener {
                     Oberflaeche.updateButtonStates(null);
                 }
                 Oberflaeche.updateSpielbrett();
-                if(Oberflaeche.game.getCurrentPlayer() == 0 && (actions.keinZugMoeglich || !Oberflaeche.game.getBereitsGewuerfelt())){
+                if (Oberflaeche.game.getCurrentPlayer() == 0 && (actions.keinZugMoeglich || !Oberflaeche.game.getBereitsGewuerfelt())) {
                     Oberflaeche.hinweisHinzufuegen("Bitte Wuerfeln");
                 }
                 break;

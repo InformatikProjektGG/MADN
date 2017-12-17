@@ -76,6 +76,5 @@ public class Startbildschirm extends JFrame {
         panel.add(einstellungen);
         panel.add(hilfe);
         c.add(panel);
-
     }
 }
