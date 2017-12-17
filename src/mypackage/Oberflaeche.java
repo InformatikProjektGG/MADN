@@ -23,6 +23,7 @@ public class Oberflaeche {
     public Oberflaeche() {
         //Dies ist ein Kommentar
         jframe = new JFrame("Mensch Ärgere Dich Nicht");
+        
         Container c = jframe.getContentPane();
         c.setLayout(new BorderLayout());
         spielfeldErstellen();   //Spielfeld hinzufuegen
