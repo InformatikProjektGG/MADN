@@ -9,10 +9,7 @@ public class Oberflaeche {
     und mit der dritten Dimension die x und y Koordinate des jeweiligen Feldes anzeigt*/
     public static int[][][] xy = new int[11][11][2];
     public static boolean[][] is = new boolean[11][11]; //Array, das angibt, welche Felder von xy kein Spielfeld darstellen
-<<<<<<< HEAD
-=======
-    static Container c;
->>>>>>> fix_wuerfel
+
     static JPanel jpanel_spielfeld;
     static JLabel jlabel_hinweis;
     static JButton jbutton_figur0;
@@ -25,15 +22,10 @@ public class Oberflaeche {
     public static Game game = new Game(4);
 
     public Oberflaeche() {
-<<<<<<< HEAD
-        //Dies ist ein Kommentar
         jframe = new JFrame("Mensch Ärgere Dich Nicht");
         
         Container c = jframe.getContentPane();
-=======
-        jframe = new JFrame("Mensch Ärgere Dich Nicht");
-        c = jframe.getContentPane();
->>>>>>> fix_wuerfel
+
         c.setLayout(new BorderLayout());
         spielfeldErstellen();   //Spielfeld hinzufuegen
 
@@ -46,17 +38,11 @@ public class Oberflaeche {
         
         //add JPanel fuer das Spielfeld
         jpanel_spielfeld = new SpielbrettCanvas(game);
-<<<<<<< HEAD
-        jpanel_spielfeld.setPreferredSize(new Dimension(660, 660));
-        c.add(jpanel_spielfeld, BorderLayout.WEST);
-        
-        addButtons(c);
-=======
+
         jpanel_spielfeld.setPreferredSize(new Dimension(950, 660));
         c.add(jpanel_spielfeld, BorderLayout.WEST);
         
-        addButtons();
->>>>>>> fix_wuerfel
+        addButtons(c);
 
         jframe.setSize(1080, 720);
         //jframe.setResizable(false);//prevent window resizing
@@ -65,11 +51,8 @@ public class Oberflaeche {
         hinweisHinzufuegen("Du darfst jetzt wuerfeln!");
     }
 
-<<<<<<< HEAD
+
     private void addButtons(Container c) {
-=======
-    private void addButtons() {
->>>>>>> fix_wuerfel
         JPanel jpanel_controlPanel = new JPanel();
         jpanel_controlPanel.setLayout(new GridLayout(10, 1));
         MenuListener menuListener = new MenuListener();
