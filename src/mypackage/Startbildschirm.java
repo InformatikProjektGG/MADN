@@ -1,5 +1,6 @@
 package mypackage;
 
+import java.*;
 import java.awt.Color;
 import java.awt.Container;
 import java.awt.image.BufferedImage;
@@ -15,29 +16,27 @@ import javax.swing.JPanel;
 
 public class Startbildschirm extends JFrame {
 
-    //Container fuer GUI Elemente
     static Container c;
 
     public static void main(String[] args) {
         Startbildschirm startbildschirm = new Startbildschirm();
-        startbildschirm.setSize(650, 450);
+        startbildschirm.setSize(640, 430);
+        startbildschirm.setResizable(false);//prevent window resizing
         startbildschirm.setLocation(10, 10);
-        startbildschirm.setBackground(new Color(252, 228, 92));
         startbildschirm.setVisible(true);
     }
 
-    public Startbildschirm() {
-        setTitle("Mensch Ã„rgere Dich Nicht");
+    Startbildschirm() {
+        setTitle("Mensch ärgere Dich nicht!");
         c = getContentPane();
         JPanel panel = new JPanel();
-        panel.setBackground(new Color(255, 255, 255));
         panel.setLayout(null);
 
         BufferedImage pic1 = null;
-        File startbild = new File(".resources/images/StartbildschirmHintergrund.png");
+        File startbild = new File("src\\mypackage\\images\\Startbildschirm.png");
         System.out.println(startbild);
         try {
-            pic1 = ImageIO.read(getClass().getResource("images/StartbildschirmHintergrund.png"));
+            pic1 = ImageIO.read(startbild);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -49,7 +48,7 @@ public class Startbildschirm extends JFrame {
         start.setOpaque(false);
         start.setContentAreaFilled(false);
         start.setBorderPainted(false);
-        ButtonListener buttonstart = new ButtonListener();
+        ButtonListener buttonstart = new ButtonListener(this);
         start.addActionListener(buttonstart);
         start.setActionCommand("Start");
 
@@ -58,7 +57,7 @@ public class Startbildschirm extends JFrame {
         einstellungen.setOpaque(false);
         einstellungen.setContentAreaFilled(false);
         einstellungen.setBorderPainted(false);
-        ButtonListener buttoneinstellungen = new ButtonListener();
+        ButtonListener buttoneinstellungen = new ButtonListener(this);
         einstellungen.addActionListener(buttoneinstellungen);
         einstellungen.setActionCommand("Einstellungen");
 
@@ -67,7 +66,7 @@ public class Startbildschirm extends JFrame {
         hilfe.setOpaque(false);
         hilfe.setContentAreaFilled(false);
         hilfe.setBorderPainted(false);
-        ButtonListener buttonhilfe = new ButtonListener();
+        ButtonListener buttonhilfe = new ButtonListener(this);
         hilfe.addActionListener(buttonhilfe);
         hilfe.setActionCommand("Hilfe");
 
@@ -76,5 +75,6 @@ public class Startbildschirm extends JFrame {
         panel.add(einstellungen);
         panel.add(hilfe);
         c.add(panel);
+
     }
 }

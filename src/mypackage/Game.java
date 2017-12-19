@@ -38,8 +38,8 @@ public class Game {
     public int getGewinner() {
         return gewinner;
     }
-
-    public boolean getBereitsGewuerfelt() {
+    
+    public boolean getBereitsGewuerfelt(){
         return hatBereitsGewuerfelt;
     }
 
@@ -57,7 +57,7 @@ public class Game {
         }
 
         positions = new Positions(players);
-
+        
         ausstehendeWuerfelVersuche = 3;
     }
 
@@ -113,10 +113,10 @@ public class Game {
 
         //ausstehendeWuerfelVersuche berechnen
         if (actions.keinZugMoeglich) {
-            if (ausstehendeWuerfelVersuche <= 0) {
+            if(ausstehendeWuerfelVersuche <= 0){
                 //naechsterSpieler();
                 istErneuterVersuch = false;
-            } else {
+            }else{
                 istErneuterVersuch = true;
             }
         } else {
@@ -136,11 +136,11 @@ public class Game {
      * @return Positions object, mit den neuen Positionen aller Figuren
      */
     public Positions moveFigur(int figurNumber) {
-        if (figurNumber < 0 || figurNumber > 3) {
-            if (ausstehendeWuerfelVersuche <= 0) {
+        if(figurNumber < 0 || figurNumber > 3){
+            if(ausstehendeWuerfelVersuche <= 0){
                 naechsterSpieler();
                 istErneuterVersuch = false;
-            } else {
+            }else{
                 istErneuterVersuch = true;
             }
             return new Positions(players);
@@ -200,7 +200,7 @@ public class Game {
         //Anzahl wuerfelVersuche fuer den naechsten Spieler bestimmen
         if (players[currentPlayer].keineFigurDraussen()) {
             ausstehendeWuerfelVersuche = 3;
-        } else {
+        }else{
             ausstehendeWuerfelVersuche = 1;
         }
     }
