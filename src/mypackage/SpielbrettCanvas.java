@@ -3,7 +3,9 @@ package mypackage;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -12,15 +14,49 @@ import javax.swing.JPanel;
 public class SpielbrettCanvas extends JPanel {
 
     Game game;
+    int theme;
 
-    public SpielbrettCanvas(Game game) {
+    public SpielbrettCanvas(Game game, int theme) {
         this.game = game;
+        this.theme = theme;
     }
 
     @Override
     public void paintComponent(Graphics g) {
         //clean background
         super.paintComponent(g);
+        
+        if (theme == 0) {
+            //Weihnachtstheme
+            Image weihnachten = null;
+            File startbildWeihnachten = new File("src\\mypackage\\images\\Weihnachten\\Weihnachten.png");
+            System.out.println(startbildWeihnachten);
+            try {
+                weihnachten = ImageIO.read(startbildWeihnachten);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            g.drawImage(weihnachten, 0, 0, null);
+        }
+        if (theme == 1) {
+            //Technologietheme
+            Image technologie = null;
+            File startbildTechnologie = new File("src\\mypackage\\images\\Technologie\\Technologie.png");
+            System.out.println(startbildTechnologie);
+            try {
+                technologie = ImageIO.read(startbildTechnologie);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            g.drawImage(technologie, 0, 0, null);
+        }
+        if (theme == 2) {
+            g.setColor(new Color(252, 228, 92));
+            g.fillRect(0, 0, 1080, 720);
+            g.setColor(Color.BLACK);
+            g.drawLine(600, 0, 10, 99999999);
+        }
+        
         g.setColor(Color.white);
         for (int i = 0; i <= 10; i++) {
             for (int s = 0; s <= 10; s++) {
@@ -75,22 +111,27 @@ public class SpielbrettCanvas extends JPanel {
             for (int figur = 0; figur < 4; figur++) {
                 //für jede Figur
                 //Farbe für die Figur wählen
+                String figurName = "";
                 switch (player) {
                     case 0:
                         //red player
                         g.setColor(new Color(153, 21, 21));
+                        figurName = "Rot";
                         break;
                     case 1:
                         //blue player
                         g.setColor(new Color(130, 177, 255));
+                        figurName = "Blau";
                         break;
                     case 2:
                         //green player
                         g.setColor(new Color(47, 175, 58));
+                        figurName = "Gruen";
                         break;
                     case 3:
                         //yellow player
                         g.setColor(new Color(203, 234, 0));
+                        figurName = "Gelb";
                         break;
                 }
 
@@ -207,6 +248,30 @@ public class SpielbrettCanvas extends JPanel {
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
                 g.setColor(Color.BLACK);
                 g.drawString(String.valueOf(figur + 1), figurXPixels + 7, figurYPixels + 27);
+
+                //richtigen Ordner f�r Figuren ausw�hlen
+                String themeFolder;
+                if (theme == 0) {
+                    themeFolder = "Weihnachten\\";
+                } else if (theme == 1) {
+                    themeFolder = "Technologie/\\";
+                } else {
+                    themeFolder = "Standard\\";
+                }
+
+                // Figur-icon zeichnen
+                String path = "src\\mypackage\\images\\" + themeFolder + figurName + String.valueOf(figur + 1) + ".png";
+                System.out.println(path);
+                Image figurImg = null;
+                File figurImgFile = new File(path);
+                System.out.println(figurImgFile);
+                try {
+                    figurImg = ImageIO.read(figurImgFile);
+                    figurImg = figurImg.getScaledInstance(45, 45, 0);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                g.drawImage(figurImg, figurXPixels - 5, figurYPixels - 5, null);
             }
         }
 

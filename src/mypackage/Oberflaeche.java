@@ -18,10 +18,10 @@ public class Oberflaeche {
     static JButton jbutton_figur3;
     static JButton jbutton_wuerfeln;
     static JFrame jframe;
-
+    static int theme;
     public static Game game = new Game(4);
 
-    public Oberflaeche() {
+    public Oberflaeche(int theme) {
         jframe = new JFrame("Mensch Ärgere Dich Nicht");
         
         Container c = jframe.getContentPane();
@@ -37,7 +37,7 @@ public class Oberflaeche {
         c.add(jpanel_hinweise, BorderLayout.SOUTH);
         
         //add JPanel fuer das Spielfeld
-        jpanel_spielfeld = new SpielbrettCanvas(game);
+        jpanel_spielfeld = new SpielbrettCanvas(game, theme);
 
         jpanel_spielfeld.setPreferredSize(new Dimension(950, 660));
         c.add(jpanel_spielfeld, BorderLayout.WEST);
@@ -48,7 +48,7 @@ public class Oberflaeche {
         //jframe.setResizable(false);//prevent window resizing
         jframe.setVisible(true);
 
-        hinweisHinzufuegen("Du darfst jetzt wuerfeln!");
+        hinweisHinzufuegen("Du darfst jetzt würfeln!");
     }
 
 
