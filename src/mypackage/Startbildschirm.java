@@ -33,10 +33,8 @@ public class Startbildschirm extends JFrame {
         panel.setLayout(null);
 
         BufferedImage pic1 = null;
-        File startbild = new File("src\\mypackage\\images\\Startbildschirm.png");
-        System.out.println(startbild);
         try {
-            pic1 = ImageIO.read(startbild);
+            pic1 = ImageIO.read(getClass().getResource("images/Startbildschirm.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

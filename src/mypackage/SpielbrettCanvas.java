@@ -29,10 +29,8 @@ public class SpielbrettCanvas extends JPanel {
         if (theme == 0) {
             //Weihnachtstheme
             Image weihnachten = null;
-            File startbildWeihnachten = new File("src\\mypackage\\images\\Weihnachten\\Weihnachten.png");
-            System.out.println(startbildWeihnachten);
             try {
-                weihnachten = ImageIO.read(startbildWeihnachten);
+                weihnachten = ImageIO.read(getClass().getResource("images/Weihnachten/Weihnachten.png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -41,10 +39,8 @@ public class SpielbrettCanvas extends JPanel {
         if (theme == 1) {
             //Technologietheme
             Image technologie = null;
-            File startbildTechnologie = new File("src\\mypackage\\images\\Technologie\\Technologie.png");
-            System.out.println(startbildTechnologie);
             try {
-                technologie = ImageIO.read(startbildTechnologie);
+                technologie = ImageIO.read(getClass().getResource("images/Technologie/Technologie.png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -252,21 +248,17 @@ public class SpielbrettCanvas extends JPanel {
                 //richtigen Ordner f�r Figuren ausw�hlen
                 String themeFolder;
                 if (theme == 0) {
-                    themeFolder = "Weihnachten\\";
+                    themeFolder = "Weihnachten/";
                 } else if (theme == 1) {
-                    themeFolder = "Technologie/\\";
+                    themeFolder = "Technologie/";
                 } else {
-                    themeFolder = "Standard\\";
+                    themeFolder = "Standard/";
                 }
 
                 // Figur-icon zeichnen
-                String path = "src\\mypackage\\images\\" + themeFolder + figurName + String.valueOf(figur + 1) + ".png";
-                System.out.println(path);
                 Image figurImg = null;
-                File figurImgFile = new File(path);
-                System.out.println(figurImgFile);
                 try {
-                    figurImg = ImageIO.read(figurImgFile);
+                    figurImg = ImageIO.read(getClass().getResource("images/"  + themeFolder + figurName + String.valueOf(figur + 1) + ".png"));
                     figurImg = figurImg.getScaledInstance(45, 45, 0);
                 } catch (IOException e) {
                     e.printStackTrace();
