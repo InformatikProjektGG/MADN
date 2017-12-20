@@ -96,6 +96,9 @@ public class SpielbrettCanvas extends JPanel {
                     if (i == 4 && s == 10) {
                         g.setColor(new Color(255, 255, 160));
                     }
+                    if((i == 4 || i == 6) && (s == 4 || s == 6)){
+                        g.setColor(Color.black);
+                    }
                     g.fillOval(Oberflaeche.xy[i][s][0], Oberflaeche.xy[i][s][1], 40, 40);
                     g.setColor(Color.white);
                 }
