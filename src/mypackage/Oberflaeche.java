@@ -62,7 +62,7 @@ public class Oberflaeche {
         jbutton_end.addActionListener(menuListener);
         jbutton_end.setActionCommand("End");
 
-        jbutton_wuerfeln = new JButton("Wuerfeln");
+        jbutton_wuerfeln = new JButton("Würfeln");
         jbutton_wuerfeln.addActionListener(menuListener);
         jbutton_wuerfeln.setActionCommand("Wuerfeln");
 
