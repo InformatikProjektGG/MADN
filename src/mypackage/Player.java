@@ -31,10 +31,29 @@ public class Player {
      * @param figur Figur, deren Position bestimmt werden soll
      * @return
      */
-    public int generalPosition(int figur) {
+    public int generalPositionFigur(int figur) {
         int generalPositions = positions[figur];
         if (positions[figur] >= 1 && positions[figur] <= 40) {
             generalPositions = positions[figur] + num * 10;
+            //sicherstellen, dass generalPosition kleiner als 41 ist
+            if (generalPositions > 40) {
+                generalPositions -= 40;
+            }
+        }
+
+        return generalPositions;
+    }
+    
+    /**
+     *
+     *
+     * @param position Position aus Sicht dieses Spielers
+     * @return Position aus Sicht von Spieler 0
+     */
+    public int generalPosition(int position) {
+        int generalPositions = position;
+        if (position >= 1 && position <= 40) {
+            generalPositions = position + num * 10;
             //sicherstellen, dass generalPosition kleiner als 41 ist
             if (generalPositions > 40) {
                 generalPositions -= 40;

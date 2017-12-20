@@ -69,7 +69,7 @@ public class Game {
      */
     public Actions wuerfeln() {
         //zufaellige zahl generieren (1-6)
-        wuerfelZahl = (int) Math.round(Math.random() * 6 + 0.5);
+        wuerfelZahl = 6; //(int) Math.round(Math.random() * 6 + 0.5);
         ausstehendeWuerfelVersuche--;   //Ein Versuch weniger verbleibend
         hatBereitsGewuerfelt = true;
         int[] figurZiehen = new int[4];
@@ -78,13 +78,16 @@ public class Game {
             figurZiehen[figur] = wuerfelZahl;
             // check if erlaubt
             // check eigene Figuren
-            for (int eigeneFigur = 0; eigeneFigur < 4; eigeneFigur++) {
+            if(istVonEigenerFigurBesetzt(currentPlayer, figur, players[currentPlayer].positions[figur] + wuerfelZahl)){
+                figurZiehen[figur] = 0;
+            }
+            /*for (int eigeneFigur = 0; eigeneFigur < 4; eigeneFigur++) {
                 if (players[currentPlayer].positions[eigeneFigur] == players[currentPlayer].positions[figur] + wuerfelZahl) {
                     //eigene Figur steht bereits auf diesem Feld
                     figurZiehen[figur] = 0;
                     break;
                 }
-            }
+            }*/
 
             //check Spielfeld Ende
             if (players[currentPlayer].positions[figur] + wuerfelZahl > 44) {
@@ -145,21 +148,25 @@ public class Game {
             }
             return new Positions(players);
         }
-        if (players[currentPlayer].positions[figurNumber] == 0) {
+
+        int currentPosition = players[currentPlayer].positions[figurNumber];
+        int newPosition;
+
+        if (currentPosition == 0) {
             //stelle Figur raus
-            players[currentPlayer].positions[figurNumber] = 1;
+            newPosition = 1;
         } else {
             //stelle Figur (wuerfelZahl) Felder weiter
-            players[currentPlayer].positions[figurNumber] += wuerfelZahl;
+            newPosition = currentPosition + wuerfelZahl;
         }
 
-        int newPosition = players[currentPlayer].generalPosition(figurNumber);
-
+        //int newPosition = players[currentPlayer].generalPosition(figurNumber);
         // check if gegnerische Figuren geschlagen
         for (int gegner = 0; gegner < 4; gegner++) {
             if (gegner != currentPlayer) {
                 for (int figur = 0; figur < 4; figur++) {
-                    if (players[gegner].generalPosition(figur) == newPosition && newPosition <= 40) {
+                    if (players[gegner].generalPositionFigur(figur) == players[currentPlayer].generalPosition(newPosition)
+                            && newPosition <= 40) {
                         // gegnerische Figur geschlagen
                         players[gegner].positions[figur] = 0;
                         break;
@@ -167,6 +174,15 @@ public class Game {
                 }
             }
         }
+
+        if ((players[currentPlayer].generalPosition(newPosition) + 5) % 10 == 0) {
+            //Figur steht auf dem Tunnel Anfang
+            if(!istVonEigenerFigurBesetzt(currentPlayer, figurNumber, (newPosition + 20) % 40)){
+                newPosition = (newPosition + 20) % 40;
+            }
+        }
+        
+        players[currentPlayer].positions[figurNumber] = newPosition;
 
         //check if currentPlayer schon gewonnen hat
         boolean hatGewonnen = true;
@@ -205,4 +221,23 @@ public class Game {
         }
     }
 
+    /**
+     * 
+     * @param player Spieler, der eine Figur bewegen moechte
+     * @param figur Zahl, welche die Figur angibt, die bewegt werden soll
+     * (players[player].positions[figur] != position)
+     * @param position gewuenchte neue Position dieser Figur
+     * @return True, wenn der Zug erlaubt ist
+     */
+    private boolean istVonEigenerFigurBesetzt(int player, int figur, int position) {
+        boolean istBesetzt = false;
+        for (int eigeneFigur = 0; eigeneFigur < 4; eigeneFigur++) {
+            if (position == players[player].positions[eigeneFigur]) {
+                //eigene Figur steht bereits auf diesem Feld
+                istBesetzt = true;
+                break;
+            }
+        }
+        return istBesetzt;
+    }
 }
