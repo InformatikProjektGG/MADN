@@ -37,10 +37,11 @@ public class Oberflaeche {
         c.add(jpanel_hinweise, BorderLayout.SOUTH);
         
         //add JPanel fuer das Spielfeld
-        jpanel_spielfeld = new SpielbrettCanvas(game, theme);
+        jpanel_spielfeld = new SpielbrettJPanel(game, theme);
 
         jpanel_spielfeld.setPreferredSize(new Dimension(950, 660));
-        c.add(jpanel_spielfeld, BorderLayout.WEST);
+        jpanel_spielfeld.setLocation(0, 0);
+        c.add(jpanel_spielfeld);
         
         addButtons(c);
 

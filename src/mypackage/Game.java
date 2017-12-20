@@ -69,7 +69,7 @@ public class Game {
      */
     public Actions wuerfeln() {
         //zufaellige zahl generieren (1-6)
-        wuerfelZahl = 6; //(int) Math.round(Math.random() * 6 + 0.5);
+        wuerfelZahl = (int) Math.round(Math.random() * 6 + 0.5);
         ausstehendeWuerfelVersuche--;   //Ein Versuch weniger verbleibend
         hatBereitsGewuerfelt = true;
         int[] figurZiehen = new int[4];

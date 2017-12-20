@@ -13,7 +13,7 @@ public class Positions {
         this.positions = new int[players.length][4];
         for (int player = 0; player < players.length; player++) {
             for (int figur = 0; figur < 4; figur++) {
-                this.positions[player][figur] = players[player].generalPosition(figur);
+                this.positions[player][figur] = players[player].generalPositionFigur(figur);
             }
         }
     }

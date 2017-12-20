@@ -1,6 +1,7 @@
 package mypackage;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
@@ -11,12 +12,12 @@ import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 
-public class SpielbrettCanvas extends JPanel {
+public class SpielbrettJPanel extends JPanel {
 
     Game game;
     int theme;
 
-    public SpielbrettCanvas(Game game, int theme) {
+    public SpielbrettJPanel(Game game, int theme) {
         this.game = game;
         this.theme = theme;
     }
@@ -25,7 +26,7 @@ public class SpielbrettCanvas extends JPanel {
     public void paintComponent(Graphics g) {
         //clean background
         super.paintComponent(g);
-        
+        Dimension dimension = getSize();
         if (theme == 0) {
             //Weihnachtstheme
             Image weihnachten = null;
@@ -34,7 +35,7 @@ public class SpielbrettCanvas extends JPanel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            g.drawImage(weihnachten, 0, 0, null);
+            g.drawImage(weihnachten, 0, 0, dimension.width, dimension.height, null);
         }
         if (theme == 1) {
             //Technologietheme
@@ -44,64 +45,106 @@ public class SpielbrettCanvas extends JPanel {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            g.drawImage(technologie, 0, 0, null);
+            g.drawImage(technologie, 0, 0, dimension.width, dimension.height, null);
         }
         if (theme == 2) {
             g.setColor(new Color(252, 228, 92));
-            g.fillRect(0, 0, 1080, 720);
+            g.fillRect(0, 0, dimension.width, dimension.height);
             g.setColor(Color.BLACK);
-            g.drawLine(600, 0, 10, 99999999);
         }
-        
+
+        //calculate coordinates for grid layout
+        int[][][] gridXY = new int[11][11][2];  //dritte Dimension beinhaltet x und y Koordinaten
+
+        int spielfeldKantenLaenge;
+        if (dimension.width * 0.7 > dimension.height) {
+            spielfeldKantenLaenge = dimension.height;
+        } else {
+            spielfeldKantenLaenge = (int) Math.round(dimension.width * 0.7);
+        }
+        for (int x = 0; x <= 10; x++) {
+            for (int y = 0; y <= 10; y++) {
+                //for every grid coordinate
+                gridXY[x][y][0] = x * (spielfeldKantenLaenge / 11) + 10;
+                gridXY[x][y][1] = y * (spielfeldKantenLaenge / 11) + 10;
+            }
+        }
+
         g.setColor(Color.white);
-        for (int i = 0; i <= 10; i++) {
-            for (int s = 0; s <= 10; s++) {
-                if (Oberflaeche.is[i][s] == false) {
-                    g.setColor(Color.black);
-                    g.fillOval(Oberflaeche.xy[i][s][0], Oberflaeche.xy[i][s][1], 42, 42);
+        for (int x = 0; x <= 10; x++) {
+            for (int y = 0; y <= 10; y++) {
+                g.setColor(Color.white);
+                boolean malen = false;
+                //Spielfelder markieren
+                if (x == 4 || x == 5 || x == 6) {
                     g.setColor(Color.white);
-                    if ((i == 0 || i == 1) && (s == 0 || s == 1)) {
-                        g.setColor(Color.red);
-                    }
-                    if ((s == 5) && (i == 1 || i == 2 || i == 3 || i == 4)) {
-                        g.setColor(Color.red);
-                    }
-                    if (i == 0 && s == 4) {
-                        g.setColor(new Color(255, 160, 160));
-                    }
-                    if ((i == 9 || i == 10) && (s == 9 || s == 10)) {
-                        g.setColor(Color.green);
-                    }
-                    if ((s == 5) && (i == 6 || i == 7 || i == 8 || i == 9)) {
-                        g.setColor(Color.green);
-                    }
-                    if (i == 10 && s == 6) {
-                        g.setColor(new Color(160, 255, 160));
-                    }
-                    if ((i == 9 || i == 10) && (s == 0 || s == 1)) {
-                        g.setColor(Color.blue);
-                    }
-                    if ((i == 5) && (s == 1 || s == 2 || s == 3 || s == 4)) {
-                        g.setColor(Color.blue);
-                    }
-                    if (i == 6 && s == 0) {
-                        g.setColor(new Color(160, 160, 255));
-                    }
-                    if ((s == 9 || s == 10) && (i == 0 || i == 1)) {
-                        g.setColor(Color.yellow);
-                    }
-                    if ((i == 5) && (s == 6 || s == 7 || s == 8 || s == 9)) {
-                        g.setColor(Color.yellow);
-                    }
-                    if (i == 4 && s == 10) {
-                        g.setColor(new Color(255, 255, 160));
-                    }
-                    if((i == 4 || i == 6) && (s == 4 || s == 6)){
-                        g.setColor(Color.black);
-                    }
-                    g.fillOval(Oberflaeche.xy[i][s][0], Oberflaeche.xy[i][s][1], 40, 40);
-                    g.setColor(Color.white);
+                    malen = true;
                 }
+                if (y == 4 || y == 5 || y == 6) {
+                    g.setColor(Color.white);
+                    malen = true;
+                }
+                if ((x == 0 || x == 1) && (y == 0 || y == 1)) {
+                    g.setColor(Color.red);
+                    malen = true;
+                }
+                if ((y == 5) && (x == 1 || x == 2 || x == 3 || x == 4)) {
+                    g.setColor(Color.red);
+                    malen = true;
+                }
+                if (x == 0 && y == 4) {
+                    g.setColor(new Color(255, 160, 160));
+                    malen = true;
+                }
+                if ((x == 9 || x == 10) && (y == 9 || y == 10)) {
+                    g.setColor(Color.green);
+                    malen = true;
+                }
+                if ((y == 5) && (x == 6 || x == 7 || x == 8 || x == 9)) {
+                    g.setColor(Color.green);
+                    malen = true;
+                }
+                if (x == 10 && y == 6) {
+                    g.setColor(new Color(160, 255, 160));
+                    malen = true;
+                }
+                if ((x == 9 || x == 10) && (y == 0 || y == 1)) {
+                    g.setColor(Color.blue);
+                    malen = true;
+                }
+                if ((x == 5) && (y == 1 || y == 2 || y == 3 || y == 4)) {
+                    g.setColor(Color.blue);
+                    malen = true;
+                }
+                if (x == 6 && y == 0) {
+                    g.setColor(new Color(160, 160, 255));
+                    malen = true;
+                }
+                if ((y == 9 || y == 10) && (x == 0 || x == 1)) {
+                    g.setColor(Color.yellow);
+                    malen = true;
+                }
+                if ((x == 5) && (y == 6 || y == 7 || y == 8 || y == 9)) {
+                    g.setColor(Color.yellow);
+                    malen = true;
+                }
+                if (x == 4 && y == 10) {
+                    g.setColor(new Color(255, 255, 160));
+                    malen = true;
+                }
+                if ((x == 4 || x == 6) && (y == 4 || y == 6)) {
+                    g.setColor(Color.black);
+                    malen = true;
+                }
+                if (x == 5 && y == 5) {
+                    malen = false;
+                }
+
+                if (malen) {
+                    g.fillOval(gridXY[x][y][0], gridXY[x][y][1], spielfeldKantenLaenge / 13, spielfeldKantenLaenge / 13);
+                }
+
+                g.setColor(Color.white);
             }
         }
 
@@ -239,9 +282,9 @@ public class SpielbrettCanvas extends JPanel {
                 }
 
                 //figur zeichnen
-                int figurXPixels = Oberflaeche.xy[figurX][figurY][0] + 5;
-                int figurYPixels = Oberflaeche.xy[figurX][figurY][1] + 5;
-                g.fillRect(figurXPixels, figurYPixels, 30, 30);
+                int figurXPixels = gridXY[figurX][figurY][0] + 5;
+                int figurYPixels = gridXY[figurX][figurY][1] + 5;
+                //g.fillRect(figurXPixels, figurYPixels, dimension.width / 40, dimension.height / 40);
 
                 //draw Figur Zahl
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 30));
@@ -261,12 +304,12 @@ public class SpielbrettCanvas extends JPanel {
                 // Figur-icon zeichnen
                 Image figurImg = null;
                 try {
-                    figurImg = ImageIO.read(getClass().getResource("images/"  + themeFolder + figurName + String.valueOf(figur + 1) + ".png"));
+                    figurImg = ImageIO.read(getClass().getResource("images/" + themeFolder + figurName + String.valueOf(figur + 1) + ".png"));
                     figurImg = figurImg.getScaledInstance(45, 45, 0);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                g.drawImage(figurImg, figurXPixels - 5, figurYPixels - 5, null);
+                g.drawImage(figurImg, figurXPixels - 5, figurYPixels - 5, spielfeldKantenLaenge / 13, spielfeldKantenLaenge / 13, null);
             }
         }
 
@@ -281,11 +324,10 @@ public class SpielbrettCanvas extends JPanel {
                     img = ImageIO.read(getClass().getResource("images/Wuerfel" + wuerfelZahl + ".png"));
                 } catch (IOException e) {
                 }
-                //positioniere Wuerfel rechts vom Spielfeld
-                int wuerfelX = Oberflaeche.xy[10][3][0] + Oberflaeche.xy[3][3][0];
-                // random y coordinate
-                int wuerfelY = (int) Math.round(Oberflaeche.xy[10][4][1] * (new Random().nextFloat() + 0.5));
-                g.drawImage(img, wuerfelX, wuerfelY, this);
+                //random x and y coordinate rechst vom Spielfeld
+                int wuerfelX = (int) Math.round(dimension.width * 0.7 * (new Random().nextFloat() / 10 + 0.95));
+                int wuerfelY = (int) Math.round(gridXY[10][4][1] * (new Random().nextFloat() + 0.5));
+                g.drawImage(img, wuerfelX, wuerfelY, spielfeldKantenLaenge / 7, spielfeldKantenLaenge / 7, this);
             }
         }
     }
