@@ -46,7 +46,7 @@ public class Startbildschirm extends JFrame {
         start.setOpaque(false);
         start.setContentAreaFilled(false);
         start.setBorderPainted(false);
-        ButtonListener buttonstart = new ButtonListener(this);
+        StartbildschirmButtonListener buttonstart = new StartbildschirmButtonListener(this);
         start.addActionListener(buttonstart);
         start.setActionCommand("Start");
 
@@ -55,7 +55,7 @@ public class Startbildschirm extends JFrame {
         einstellungen.setOpaque(false);
         einstellungen.setContentAreaFilled(false);
         einstellungen.setBorderPainted(false);
-        ButtonListener buttoneinstellungen = new ButtonListener(this);
+        StartbildschirmButtonListener buttoneinstellungen = new StartbildschirmButtonListener(this);
         einstellungen.addActionListener(buttoneinstellungen);
         einstellungen.setActionCommand("Einstellungen");
 
@@ -64,7 +64,7 @@ public class Startbildschirm extends JFrame {
         hilfe.setOpaque(false);
         hilfe.setContentAreaFilled(false);
         hilfe.setBorderPainted(false);
-        ButtonListener buttonhilfe = new ButtonListener(this);
+        StartbildschirmButtonListener buttonhilfe = new StartbildschirmButtonListener(this);
         hilfe.addActionListener(buttonhilfe);
         hilfe.setActionCommand("Hilfe");
 

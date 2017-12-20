@@ -5,11 +5,6 @@ import javax.swing.*;
 
 public class Oberflaeche {
 
-    /*Array, das mit den ersten beiden Koordinaten jedes Spielfeld abdeckt
-    und mit der dritten Dimension die x und y Koordinate des jeweiligen Feldes anzeigt*/
-    public static int[][][] xy = new int[11][11][2];
-    public static boolean[][] is = new boolean[11][11]; //Array, das angibt, welche Felder von xy kein Spielfeld darstellen
-
     static JPanel jpanel_spielfeld;
     static JLabel jlabel_hinweis;
     static JButton jbutton_figur0;
@@ -17,17 +12,14 @@ public class Oberflaeche {
     static JButton jbutton_figur2;
     static JButton jbutton_figur3;
     static JButton jbutton_wuerfeln;
-    static JFrame jframe;
+    JFrame jframe;
     static int theme;
     public static Game game = new Game(4);
 
     public Oberflaeche(int theme) {
         jframe = new JFrame("Mensch Ärgere Dich Nicht");
-        
         Container c = jframe.getContentPane();
-
         c.setLayout(new BorderLayout());
-        spielfeldErstellen();   //Spielfeld hinzufuegen
 
         //add JPanel fuer Hinweise
         JPanel jpanel_hinweise = new JPanel();
@@ -35,35 +27,31 @@ public class Oberflaeche {
         jlabel_hinweis = new JLabel("original: ");
         jpanel_hinweise.add(jlabel_hinweis);
         c.add(jpanel_hinweise, BorderLayout.SOUTH);
-        
+
         //add JPanel fuer das Spielfeld
         jpanel_spielfeld = new SpielbrettJPanel(game, theme);
-
         jpanel_spielfeld.setPreferredSize(new Dimension(950, 660));
-        jpanel_spielfeld.setLocation(0, 0);
         c.add(jpanel_spielfeld);
-        
+
         addButtons(c);
 
         jframe.setSize(1080, 720);
-        //jframe.setResizable(false);//prevent window resizing
         jframe.setVisible(true);
 
         hinweisHinzufuegen("Du darfst jetzt würfeln!");
     }
 
-
     private void addButtons(Container c) {
         JPanel jpanel_controlPanel = new JPanel();
         jpanel_controlPanel.setLayout(new GridLayout(10, 1));
-        MenuListener menuListener = new MenuListener();
+        OberflaecheButtonListener menuListener = new OberflaecheButtonListener();
 
         //add Start button
         JButton jbutton_end = new JButton("End");
         jbutton_end.addActionListener(menuListener);
         jbutton_end.setActionCommand("End");
 
-        jbutton_wuerfeln = new JButton("Würfeln");
+        jbutton_wuerfeln = new JButton("   Würfeln   ");
         jbutton_wuerfeln.addActionListener(menuListener);
         jbutton_wuerfeln.setActionCommand("Wuerfeln");
 
@@ -97,63 +85,6 @@ public class Oberflaeche {
         jbutton_figur1.setEnabled(false);
         jbutton_figur2.setEnabled(false);
         jbutton_figur3.setEnabled(false);
-    }
-
-    public void menueErstellen() {
-        MenuListener mL = new MenuListener();
-        JMenuBar menueleiste = new JMenuBar();
-        JMenu menuFile = new JMenu("Datei");
-        JMenu menuHelp = new JMenu("Hilfe");
-
-        JMenuItem untermenueDateiOeffnen = new JMenuItem("Oeffnen");
-        JMenuItem untermenueDateiNeuesSpiel = new JMenuItem("Neues Spiel");
-        JMenuItem untermenueDateiSpielSpeichern = new JMenuItem("Spiel speichern");
-        JMenuItem untermenueDateiBeenden = new JMenuItem("Beenden");
-        untermenueDateiBeenden.addActionListener(mL);
-        untermenueDateiBeenden.setActionCommand("exit");
-        menuFile.add(untermenueDateiOeffnen);
-        menuFile.add(untermenueDateiNeuesSpiel);
-        menuFile.add(untermenueDateiSpielSpeichern);
-        menuFile.add(untermenueDateiBeenden);
-
-        menueleiste.add(menuFile);
-        menueleiste.add(menuHelp);
-        jframe.setJMenuBar(menueleiste);
-    }
-
-    /**
-     * berechnet die Koordinaten fuer das Spielfeld
-     */
-    public void spielfeldErstellen() {
-        for (int i = 0; i <= 10; i++) {
-            for (int s = 0; s <= 10; s++) {
-                for (int t = 0; t <= 1; t++) {
-                    if (t == 0) {
-                        xy[i][s][t] = (i + 1) * 10 + i * 40;
-                    }
-                    if (t == 1) {
-                        xy[i][s][t] = (s + 1) * 10 + s * 40;
-                    }
-                }
-            }
-        }
-        for (int u = 0; u <= 10; u++) {     //Markieren, welche Felder keine Spielfelder sind...
-            for (int v = 0; v <= 10; v++) { //...und deshalb nicht angezeigt werden sollen
-                if (u == 0 || u == 1 || u == 9 || u == 10) {
-                    if (v == 2 || v == 3 || v == 7 || v == 8) {
-                        is[u][v] = true;
-                    }
-                }
-                if (u == 2 || u == 3 || u == 7 || u == 8) {
-                    if (v != 4 && v != 5 && v != 6) {
-                        is[u][v] = true;
-                    }
-                }
-            }
-        }
-        is[5][5] = true;
-
-        //jframe.add(new SpielbrettCanvas(game));
     }
 
     /**

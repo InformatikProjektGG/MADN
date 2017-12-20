@@ -6,7 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 import javax.imageio.ImageIO;
@@ -284,7 +283,6 @@ public class SpielbrettJPanel extends JPanel {
                 //figur zeichnen
                 int figurXPixels = gridXY[figurX][figurY][0] + 5;
                 int figurYPixels = gridXY[figurX][figurY][1] + 5;
-                //g.fillRect(figurXPixels, figurYPixels, dimension.width / 40, dimension.height / 40);
 
                 //draw Figur Zahl
                 g.setFont(new Font("TimesRoman", Font.PLAIN, 30));

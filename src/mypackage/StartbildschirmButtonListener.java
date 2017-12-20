@@ -6,11 +6,11 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
-public class ButtonListener implements ActionListener {
+public class StartbildschirmButtonListener implements ActionListener {
 
     Startbildschirm startbildschirm;
 
-    public ButtonListener(Startbildschirm startbildschirm) {
+    public StartbildschirmButtonListener(Startbildschirm startbildschirm) {
         this.startbildschirm = startbildschirm;
     }
 
